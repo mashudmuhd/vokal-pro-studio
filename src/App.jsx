@@ -187,9 +187,9 @@ const App = () => {
 
     const handleGenerateVoice = async () => {
         if (isProcessing) return; // Prevent multiple clicks
-        if (!isGuestMode && user && !hasPlan && credits < 20) {
+        if (!isGuestMode && user && !hasPlan) {
             setShowPlans(true);
-            toast.error("Not enough credits! Please upgrade to continue.", { icon: '💎' });
+            toast.error("Please upgrade to a Studio Pro plan to generate full-length audios!", { icon: '👑' });
             return;
         }
 
@@ -239,9 +239,6 @@ const App = () => {
                 setCurrentAudio(meta);
                 setParsedSubtitles(enableSubtitles ? parseSRT(srtText) : []);
                 setVaultItems(prev => [meta, ...prev]);
-                if (!hasPlan && user && !isGuestMode) {
-                    setCredits(prev => Math.max(0, prev - 20));
-                }
                 voiceRef.current.src = url;
             }
         } catch (e) { setError(e.message); } finally { setIsProcessing(false); }
@@ -356,7 +353,7 @@ const App = () => {
                                 {hasPlan ? (
                                     <span className="text-[8px] sm:text-[9px] text-amber-500 font-black uppercase tracking-widest flex items-center gap-1 mt-0.5"><Crown className="w-3 h-3" /> Studio Pro</span>
                                 ) : (
-                                    !isGuestMode ? <span className="text-[8px] sm:text-[9px] text-emerald-400 font-black uppercase tracking-widest flex items-center gap-1 mt-0.5"><Zap className="w-3 h-3" /> {credits} Credits</span> : <span className="text-[8px] sm:text-[9px] text-slate-500 font-black uppercase tracking-widest mt-0.5">Tryout Mode</span>
+                                    !isGuestMode ? <span className="text-[8px] sm:text-[9px] text-slate-500 font-black uppercase tracking-widest mt-0.5">Free User</span> : <span className="text-[8px] sm:text-[9px] text-slate-500 font-black uppercase tracking-widest mt-0.5">Tryout Mode</span>
                                 )}
                             </div>
 
