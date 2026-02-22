@@ -43,6 +43,7 @@ const App = () => {
     const [lang, setLang] = useState('Malayalam');
     const [srtLang, setSrtLang] = useState('English');
     const [enableSubtitles, setEnableSubtitles] = useState(false);
+    const [showVoiceSheet, setShowVoiceSheet] = useState(false);
     const [error, setError] = useState(null);
     const [apiKeyValue, setApiKeyValue] = useState(apiKey);
 
@@ -245,8 +246,37 @@ const App = () => {
     };
 
     if (authLoading) return <div className="min-h-screen bg-[#08090D] flex items-center justify-center"><Loader2 className="w-10 h-10 text-rose-500 animate-spin" /></div>;
-
     if (!user && !isGuestMode) return <Auth onGuestLogin={() => setIsGuestMode(true)} />;
+
+    const voiceModelsContent = (
+        <div className="space-y-3 relative z-10 w-full mb-4">
+            {VOICE_LIST.map(v => (
+                <div key={v.id} className={`w-full p-4 rounded-2xl text-left border flex items-center gap-4 transition-all duration-300 group cursor-pointer ${selectedVoice === v.id ? 'bg-rose-500/10 border-rose-500/30 shadow-inner' : 'bg-black/40 border-white/5 hover:border-white/10 hover:bg-white/5'}`} onClick={() => { setSelectedVoice(v.id); setShowVoiceSheet(false); }}>
+                    <button
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            if (playingPreview === v.id) {
+                                voiceRef.current.pause();
+                                setPlayingPreview(null);
+                            } else {
+                                setPlayingPreview(v.id);
+                                if (isPlayingCurrent) voiceRef.current.pause();
+                                setTimeout(() => setPlayingPreview(null), 3000);
+                            }
+                        }}
+                        className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 transition-colors z-20 hover:scale-105 active:scale-95 ${playingPreview === v.id ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/20' : (selectedVoice === v.id ? 'bg-rose-500 text-white shadow-lg shadow-rose-500/20' : 'bg-white/5 text-slate-400 hover:bg-white/10 group-hover:text-white')}`}
+                    >
+                        {playingPreview === v.id ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4 ml-0.5" />}
+                    </button>
+                    <div className="flex-1">
+                        <div className={`text-sm font-bold mb-1 transition-colors ${selectedVoice === v.id ? 'text-white' : 'text-slate-300 group-hover:text-white'}`}>{v.label}</div>
+                        <div className="text-[10px] text-slate-500 font-medium">{v.type}</div>
+                    </div>
+                    {selectedVoice === v.id && <CheckCircle2 className="w-5 h-5 text-rose-500 shrink-0" />}
+                </div>
+            ))}
+        </div>
+    );
 
     return (
         <div className="h-[100dvh] bg-[#08090D] text-slate-300 flex flex-col md:flex-row overflow-hidden font-sans">
@@ -303,6 +333,26 @@ const App = () => {
                                     <button onClick={() => { setHasPlan(true); setShowPlans(false); toast.success('Studio Plan Activated!', { icon: '💳' }); }} className="w-full py-4 bg-white/5 hover:bg-amber-500 hover:text-white text-slate-300 rounded-xl font-bold uppercase tracking-widest transition-all">Go Unlimited</button>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Mobile Voice Bottom Sheet */}
+            {showVoiceSheet && (
+                <div className="fixed inset-0 z-[60] lg:hidden flex flex-col justify-end">
+                    <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" onClick={() => setShowVoiceSheet(false)}></div>
+                    <div className="relative bg-[#0F1118] border-t border-white/10 rounded-t-[2.5rem] w-full max-h-[85vh] flex flex-col pt-8 pb-10 px-6 sm:px-10 shadow-2xl animate-in slide-in-from-bottom-full duration-300">
+                        <div className="flex justify-between items-center mb-6 shrink-0">
+                            <h4 className="text-[10px] sm:text-xs font-black uppercase text-slate-400 tracking-[0.2em] flex items-center gap-3">
+                                <Headset className="w-4 h-4 sm:w-5 sm:h-5 text-rose-500" /> Choose Voice Model
+                            </h4>
+                            <button onClick={() => setShowVoiceSheet(false)} className="p-2 bg-white/5 rounded-xl text-slate-400 hover:text-white hover:bg-white/10 transition-colors">
+                                <X className="w-5 h-5" />
+                            </button>
+                        </div>
+                        <div className="overflow-y-auto custom-scrollbar flex-1 pr-2">
+                            {voiceModelsContent}
                         </div>
                     </div>
                 </div>
@@ -417,46 +467,24 @@ const App = () => {
                                     )}
                                 </div>
 
-                                <button onClick={handleGenerateVoice} disabled={isProcessing || !script.trim()} className="w-full sm:w-auto relative z-10 shrink-0 px-8 py-5 bg-gradient-to-r from-rose-600 to-rose-500 rounded-2xl font-black text-white uppercase tracking-widest text-xs flex items-center justify-center gap-3 shadow-xl hover:shadow-rose-600/30 transition-all active:scale-95 disabled:opacity-40 disabled:grayscale">
-                                    {isProcessing ? <Loader2 className="animate-spin w-5 h-5" /> : <Sparkles className="w-5 h-5" />} {isProcessing ? "Synthesizing..." : "Generate Master"}
-                                </button>
+                                <div className="w-full sm:w-auto flex flex-col sm:flex-row gap-4 relative z-10">
+                                    <button onClick={() => setShowVoiceSheet(true)} className="lg:hidden w-full sm:w-auto px-6 py-4 bg-[#0F1118]/80 backdrop-blur-md border border-white/10 hover:bg-white/5 text-slate-300 rounded-2xl font-bold text-xs uppercase flex items-center justify-between gap-3 shadow-lg transition-all active:scale-95">
+                                        <span className="flex items-center gap-2"><Headset className="w-4 h-4 text-rose-500" /> Voice: {VOICE_LIST.find(v => v.id === selectedVoice)?.label || 'Select'}</span>
+                                        <ChevronRight className="w-4 h-4" />
+                                    </button>
+
+                                    <button onClick={handleGenerateVoice} disabled={isProcessing || !script.trim()} className="w-full sm:w-auto px-8 py-5 bg-gradient-to-r from-rose-600 to-rose-500 rounded-2xl font-black text-white uppercase tracking-widest text-xs flex items-center justify-center gap-3 shadow-xl hover:shadow-rose-600/30 transition-all active:scale-95 disabled:opacity-40 disabled:grayscale">
+                                        {isProcessing ? <Loader2 className="animate-spin w-5 h-5" /> : <Sparkles className="w-5 h-5" />} {isProcessing ? "Synthesizing..." : "Generate Master"}
+                                    </button>
+                                </div>
                             </div>
                         </div>
 
                         <div className="w-full lg:w-[460px] shrink-0 flex flex-col gap-6 h-full pb-8 md:pb-0">
-                            <div className="bg-[#0F1118]/80 backdrop-blur-xl p-8 rounded-[2.5rem] border border-white/5 shadow-xl shrink-0 transition-hover duration-500 hover:border-white/10 relative overflow-hidden group">
+                            <div className="hidden lg:block bg-[#0F1118]/80 backdrop-blur-xl p-8 rounded-[2.5rem] border border-white/5 shadow-xl shrink-0 transition-hover duration-500 hover:border-white/10 relative overflow-hidden group">
                                 <div className="absolute top-0 right-0 w-32 h-32 bg-rose-500/5 rounded-full blur-3xl group-hover:bg-rose-500/10 transition-colors duration-700"></div>
                                 <h4 className="text-[10px] font-black uppercase text-slate-500 mb-6 tracking-[0.2em] flex items-center gap-3"><Headset className="w-4 h-4 text-rose-500" /> Voice Models</h4>
-                                <div className="space-y-3 relative z-10">
-                                    {VOICE_LIST.map(v => (
-                                        <div key={v.id} className={`w-full p-4 rounded-2xl text-left border flex items-center gap-4 transition-all duration-300 group cursor-pointer ${selectedVoice === v.id ? 'bg-rose-500/10 border-rose-500/30 shadow-inner' : 'bg-black/40 border-white/5 hover:border-white/10 hover:bg-white/5'}`} onClick={() => setSelectedVoice(v.id)}>
-                                            <button
-                                                onClick={(e) => {
-                                                    e.stopPropagation();
-                                                    if (playingPreview === v.id) {
-                                                        voiceRef.current.pause();
-                                                        setPlayingPreview(null);
-                                                    } else {
-                                                        // Fallback sample audio or generating real preview could go here. 
-                                                        // For now simulating a play state change on the UI
-                                                        setPlayingPreview(v.id);
-                                                        if (isPlayingCurrent) voiceRef.current.pause();
-                                                        // Simulate preview ending after a bit
-                                                        setTimeout(() => setPlayingPreview(null), 3000);
-                                                    }
-                                                }}
-                                                className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 transition-colors z-20 hover:scale-105 active:scale-95 ${playingPreview === v.id ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/20' : (selectedVoice === v.id ? 'bg-rose-500 text-white shadow-lg shadow-rose-500/20' : 'bg-white/5 text-slate-400 hover:bg-white/10 group-hover:text-white')}`}
-                                            >
-                                                {playingPreview === v.id ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4 ml-0.5" />}
-                                            </button>
-                                            <div className="flex-1">
-                                                <div className={`text-sm font-bold mb-1 transition-colors ${selectedVoice === v.id ? 'text-white' : 'text-slate-300 group-hover:text-white'}`}>{v.label}</div>
-                                                <div className="text-[10px] text-slate-500 font-medium">{v.type}</div>
-                                            </div>
-                                            {selectedVoice === v.id && <CheckCircle2 className="w-5 h-5 text-rose-500 shrink-0" />}
-                                        </div>
-                                    ))}
-                                </div>
+                                {voiceModelsContent}
                             </div>
 
                             <div className="flex-1 bg-gradient-to-br from-[#050505] to-[#0A0B10] p-8 rounded-[2.5rem] border border-white/5 flex flex-col shadow-inner min-h-[160px] relative overflow-hidden group">
