@@ -487,7 +487,7 @@ const App = () => {
                                 {voiceModelsContent}
                             </div>
 
-                            <div className="flex-1 bg-gradient-to-br from-[#050505] to-[#0A0B10] p-8 rounded-[2.5rem] border border-white/5 flex flex-col shadow-inner min-h-[160px] relative overflow-hidden group">
+                            <div className="flex-1 bg-gradient-to-br from-[#050505] to-[#0A0B10] p-8 rounded-[2.5rem] border border-white/5 flex flex-col shadow-inner min-h-[160px] relative overflow-hidden group mb-6 lg:mb-0">
                                 <div className="absolute -inset-10 bg-gradient-to-t from-blue-900/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-1000 blur-2xl"></div>
                                 <h4 className="text-[10px] font-black uppercase text-slate-600 mb-auto tracking-[0.2em] relative z-10 flex items-center gap-2">
                                     <Eye className="w-3 h-3 text-blue-500/60" /> Subtitle Engine
