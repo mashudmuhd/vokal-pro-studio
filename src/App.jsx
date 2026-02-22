@@ -245,13 +245,13 @@ const App = () => {
         } catch (e) { setError(e.message); } finally { setIsProcessing(false); }
     };
 
-    if (authLoading) return <div className="min-h-screen bg-[#08090D] flex items-center justify-center"><Loader2 className="w-10 h-10 text-rose-500 animate-spin" /></div>;
+    if (authLoading) return <div className="min-h-screen bg-[#08090D] flex items-center justify-center"><Loader2 className="w-10 h-10 text-blue-500 animate-spin" /></div>;
     if (!user && !isGuestMode) return <Auth onGuestLogin={() => setIsGuestMode(true)} />;
 
     const voiceModelsContent = (
         <div className="space-y-3 relative z-10 w-full mb-4">
             {VOICE_LIST.map(v => (
-                <div key={v.id} className={`w-full p-4 rounded-2xl text-left border flex items-center gap-4 transition-all duration-300 group cursor-pointer ${selectedVoice === v.id ? 'bg-rose-500/10 border-rose-500/30 shadow-inner' : 'bg-black/40 border-white/5 hover:border-white/10 hover:bg-white/5'}`} onClick={() => { setSelectedVoice(v.id); setShowVoiceSheet(false); }}>
+                <div key={v.id} className={`w-full p-4 rounded-2xl text-left border flex items-center gap-4 transition-all duration-300 group cursor-pointer ${selectedVoice === v.id ? 'bg-blue-500/10 border-blue-500/30 shadow-inner' : 'bg-black/40 border-white/5 hover:border-white/10 hover:bg-white/5'}`} onClick={() => { setSelectedVoice(v.id); setShowVoiceSheet(false); }}>
                     <button
                         onClick={(e) => {
                             e.stopPropagation();
@@ -264,7 +264,7 @@ const App = () => {
                                 setTimeout(() => setPlayingPreview(null), 3000);
                             }
                         }}
-                        className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 transition-colors z-20 hover:scale-105 active:scale-95 ${playingPreview === v.id ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/20' : (selectedVoice === v.id ? 'bg-rose-500 text-white shadow-lg shadow-rose-500/20' : 'bg-white/5 text-slate-400 hover:bg-white/10 group-hover:text-white')}`}
+                        className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 transition-colors z-20 hover:scale-105 active:scale-95 ${playingPreview === v.id ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/20' : (selectedVoice === v.id ? 'bg-blue-500 text-white shadow-lg shadow-blue-500/20' : 'bg-white/5 text-slate-400 hover:bg-white/10 group-hover:text-white')}`}
                     >
                         {playingPreview === v.id ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4 ml-0.5" />}
                     </button>
@@ -272,7 +272,7 @@ const App = () => {
                         <div className={`text-sm font-bold mb-1 transition-colors ${selectedVoice === v.id ? 'text-white' : 'text-slate-300 group-hover:text-white'}`}>{v.label}</div>
                         <div className="text-[10px] text-slate-500 font-medium">{v.type}</div>
                     </div>
-                    {selectedVoice === v.id && <CheckCircle2 className="w-5 h-5 text-rose-500 shrink-0" />}
+                    {selectedVoice === v.id && <CheckCircle2 className="w-5 h-5 text-blue-500 shrink-0" />}
                 </div>
             ))}
         </div>
@@ -286,10 +286,10 @@ const App = () => {
                 <div className="fixed inset-0 z-[2000] bg-black/80 backdrop-blur-3xl flex items-center justify-center p-4">
                     <div className="bg-[#0F1118] border border-white/5 rounded-[2.5rem] w-full max-w-5xl shadow-2xl relative overflow-hidden animate-in fade-in zoom-in-95 duration-500">
                         <button onClick={() => setShowPlans(false)} className="absolute top-6 right-6 p-2 rounded-full bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white transition-colors z-10"><X className="w-6 h-6" /></button>
-                        <div className="absolute inset-0 bg-gradient-to-br from-rose-500/10 via-transparent to-rose-900/10 pointer-events-none"></div>
+                        <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 via-transparent to-blue-900/10 pointer-events-none"></div>
                         <div className="p-12">
                             <div className="text-center mb-12 relative z-10">
-                                <h2 className="text-4xl font-black italic text-white uppercase tracking-tighter mb-4">VOKAL <span className="text-rose-500">PRO</span> PLANS</h2>
+                                <h2 className="text-4xl font-black italic text-white uppercase tracking-tighter mb-4">VOKAL <span className="text-blue-500">PRO</span> PLANS</h2>
                                 <p className="text-slate-400 max-w-xl mx-auto font-medium">Choose a studio plan to unlock high-fidelity AI voice generation and cinematic subtitle sync capabilities.</p>
                             </div>
                             <div className="grid md:grid-cols-3 gap-8 relative z-10">
@@ -306,18 +306,18 @@ const App = () => {
                                     <button onClick={() => { setHasPlan(true); setShowPlans(false); toast.success('Starter Plan Activated!', { icon: '💳' }); }} className="w-full py-4 bg-white/5 hover:bg-emerald-500 hover:text-white text-slate-300 rounded-xl font-bold uppercase tracking-widest transition-all">Buy Now</button>
                                 </div>
                                 {/* Pro Plan */}
-                                <div className="bg-gradient-to-b from-rose-900/40 to-black/80 border border-rose-500/30 rounded-3xl p-8 flex flex-col relative transform md:-translate-y-4 shadow-2xl shadow-rose-900/20">
-                                    <div className="absolute -top-4 inset-x-0 flex justify-center"><span className="bg-rose-500 text-white text-[10px] font-black uppercase tracking-widest py-1 px-4 rounded-full shadow-lg shadow-rose-500/30">Most Popular</span></div>
-                                    <div className="text-rose-500 mb-6 bg-rose-500/20 w-16 h-16 rounded-2xl flex items-center justify-center"><Star className="w-8 h-8" /></div>
+                                <div className="bg-gradient-to-b from-blue-900/40 to-black/80 border border-blue-500/30 rounded-3xl p-8 flex flex-col relative transform md:-translate-y-4 shadow-2xl shadow-blue-900/20">
+                                    <div className="absolute -top-4 inset-x-0 flex justify-center"><span className="bg-blue-500 text-white text-[10px] font-black uppercase tracking-widest py-1 px-4 rounded-full shadow-lg shadow-blue-500/30">Most Popular</span></div>
+                                    <div className="text-blue-500 mb-6 bg-blue-500/20 w-16 h-16 rounded-2xl flex items-center justify-center"><Star className="w-8 h-8" /></div>
                                     <h3 className="text-2xl font-black text-white uppercase tracking-widest mb-2">Creator</h3>
-                                    <div className="text-rose-200/60 text-sm font-medium mb-6">For serious creators</div>
-                                    <div className="text-4xl font-black text-white mb-8">₹499 <span className="text-sm font-medium text-rose-500/50">/ 100 Audio</span></div>
+                                    <div className="text-blue-200/60 text-sm font-medium mb-6">For serious creators</div>
+                                    <div className="text-4xl font-black text-white mb-8">₹499 <span className="text-sm font-medium text-blue-500/50">/ 100 Audio</span></div>
                                     <ul className="space-y-4 mb-8 flex-1">
-                                        <li className="flex gap-3 text-slate-300 text-sm"><CheckCircle2 className="w-5 h-5 text-rose-500 shrink-0" /> 100 Audio Generations</li>
-                                        <li className="flex gap-3 text-slate-300 text-sm"><CheckCircle2 className="w-5 h-5 text-rose-500 shrink-0" /> Cinematic Vocals</li>
-                                        <li className="flex gap-3 text-slate-300 text-sm"><CheckCircle2 className="w-5 h-5 text-rose-500 shrink-0" /> SRT Subtitle Export</li>
+                                        <li className="flex gap-3 text-slate-300 text-sm"><CheckCircle2 className="w-5 h-5 text-blue-500 shrink-0" /> 100 Audio Generations</li>
+                                        <li className="flex gap-3 text-slate-300 text-sm"><CheckCircle2 className="w-5 h-5 text-blue-500 shrink-0" /> Cinematic Vocals</li>
+                                        <li className="flex gap-3 text-slate-300 text-sm"><CheckCircle2 className="w-5 h-5 text-blue-500 shrink-0" /> SRT Subtitle Export</li>
                                     </ul>
-                                    <button onClick={() => { setHasPlan(true); setShowPlans(false); toast.success('Creator Plan Activated!', { icon: '💳' }); }} className="w-full py-4 bg-rose-600 hover:bg-rose-500 text-white shadow-xl shadow-rose-600/20 rounded-xl font-bold uppercase tracking-widest transition-all">Buy Creator</button>
+                                    <button onClick={() => { setHasPlan(true); setShowPlans(false); toast.success('Creator Plan Activated!', { icon: '💳' }); }} className="w-full py-4 bg-blue-600 hover:bg-blue-500 text-white shadow-xl shadow-blue-600/20 rounded-xl font-bold uppercase tracking-widest transition-all">Buy Creator</button>
                                 </div>
                                 {/* Unlimited Plan */}
                                 <div className="bg-black/50 border border-white/10 rounded-3xl p-8 flex flex-col hover:border-amber-500/30 transition-all group">
@@ -345,7 +345,7 @@ const App = () => {
                     <div className="relative bg-[#0F1118] border-t border-white/10 rounded-t-[2.5rem] w-full max-h-[85vh] flex flex-col pt-8 pb-10 px-6 sm:px-10 shadow-2xl animate-in slide-in-from-bottom-full duration-300">
                         <div className="flex justify-between items-center mb-6 shrink-0">
                             <h4 className="text-[10px] sm:text-xs font-black uppercase text-slate-400 tracking-[0.2em] flex items-center gap-3">
-                                <Headset className="w-4 h-4 sm:w-5 sm:h-5 text-rose-500" /> Choose Voice Model
+                                <Headset className="w-4 h-4 sm:w-5 sm:h-5 text-blue-500" /> Choose Voice Model
                             </h4>
                             <button onClick={() => setShowVoiceSheet(false)} className="p-2 bg-white/5 rounded-xl text-slate-400 hover:text-white hover:bg-white/10 transition-colors">
                                 <X className="w-5 h-5" />
@@ -360,17 +360,17 @@ const App = () => {
 
             {!isAudioInitialized && (
                 <div onClick={initializeAudio} className="fixed inset-0 z-[1000] bg-black flex flex-col items-center justify-center cursor-pointer backdrop-blur-xl">
-                    <Mic2 className="w-16 h-16 text-rose-600 animate-pulse mb-6" />
+                    <Mic2 className="w-16 h-16 text-blue-600 animate-pulse mb-6" />
                     <h1 className="text-xl font-black text-white uppercase tracking-[0.5em]">Tap to Start Studio</h1>
                 </div>
             )}
 
             <aside className="w-full md:w-20 bg-[#0F1118] border-t md:border-t-0 md:border-r border-white/5 flex md:flex-col items-center py-4 px-6 md:p-0 md:py-10 gap-4 md:gap-8 justify-between shrink-0 z-50 order-last md:order-first">
                 <div className="flex md:flex-col gap-4 md:gap-8 items-center w-full md:w-auto justify-between md:justify-start">
-                    <div className="w-10 h-10 bg-rose-600 rounded-xl hidden md:flex items-center justify-center shadow-lg"><Volume2 className="text-white w-5 h-5" /></div>
+                    <div className="w-10 h-10 bg-blue-600 rounded-xl hidden md:flex items-center justify-center shadow-lg"><Volume2 className="text-white w-5 h-5" /></div>
                     <nav className="flex md:flex-col gap-2 md:gap-6 w-full md:w-auto justify-center">
-                        <button onClick={() => setActiveTab('studio')} className={`p-4 rounded-xl transition-all flex-1 md:flex-none flex justify-center ${activeTab === 'studio' ? 'bg-rose-600 text-white shadow-xl shadow-rose-600/20' : 'text-slate-600 hover:bg-white/5'}`}><Layout /></button>
-                        <button onClick={() => setActiveTab('vault')} className={`p-4 rounded-xl transition-all flex-1 md:flex-none flex justify-center ${activeTab === 'vault' ? 'bg-rose-600 text-white shadow-xl shadow-rose-600/20' : 'text-slate-600 hover:bg-white/5'}`}><HistoryIcon /></button>
+                        <button onClick={() => setActiveTab('studio')} className={`p-4 rounded-xl transition-all flex-1 md:flex-none flex justify-center ${activeTab === 'studio' ? 'bg-blue-600 text-white shadow-xl shadow-blue-600/20' : 'text-slate-600 hover:bg-white/5'}`}><Layout /></button>
+                        <button onClick={() => setActiveTab('vault')} className={`p-4 rounded-xl transition-all flex-1 md:flex-none flex justify-center ${activeTab === 'vault' ? 'bg-blue-600 text-white shadow-xl shadow-blue-600/20' : 'text-slate-600 hover:bg-white/5'}`}><HistoryIcon /></button>
                     </nav>
                 </div>
             </aside>
@@ -378,14 +378,14 @@ const App = () => {
             <main className="flex-1 p-6 md:p-12 overflow-y-auto flex flex-col h-full min-h-0 order-first md:order-last">
                 <header className="flex flex-col lg:flex-row justify-between items-center mb-8 shrink-0 gap-6">
                     <div className="flex flex-col items-center lg:items-start text-center lg:text-left">
-                        <h2 className="text-2xl font-black italic text-white uppercase tracking-tighter">VOKAL <span className="text-rose-500">PRO</span></h2>
+                        <h2 className="text-2xl font-black italic text-white uppercase tracking-tighter">VOKAL <span className="text-blue-500">PRO</span></h2>
                         <p className="text-[9px] font-black uppercase text-slate-600 tracking-[0.3em]">Studio Edition</p>
                     </div>
 
                     <div className="flex items-center flex-wrap justify-center gap-4">
                         <div className="flex bg-[#0F1118] p-1.5 rounded-2xl border border-white/5 shadow-xl">
                             {SCRIPT_LANGUAGES.map(l => (
-                                <button key={l.id} onClick={() => setLang(l.id)} className={`px-4 sm:px-5 py-2 sm:py-2.5 rounded-xl text-[10px] font-bold uppercase transition-all duration-300 ${lang === l.id ? 'bg-rose-600 text-white shadow-lg shadow-rose-600/20' : 'text-slate-500 hover:text-slate-300 hover:bg-white/5'}`}>{l.native}</button>
+                                <button key={l.id} onClick={() => setLang(l.id)} className={`px-4 sm:px-5 py-2 sm:py-2.5 rounded-xl text-[10px] font-bold uppercase transition-all duration-300 ${lang === l.id ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/20' : 'text-slate-500 hover:text-slate-300 hover:bg-white/5'}`}>{l.native}</button>
                             ))}
                         </div>
 
@@ -416,7 +416,7 @@ const App = () => {
                                 } else {
                                     signOut(auth).then(() => toast.success('Signed out'));
                                 }
-                            }} className="p-2 sm:p-2.5 rounded-xl transition-all text-slate-600 hover:text-rose-500 hover:bg-rose-500/10 flex items-center justify-center shrink-0" title={isGuestMode ? "Sign In" : "Sign Out"}>
+                            }} className="p-2 sm:p-2.5 rounded-xl transition-all text-slate-600 hover:text-blue-500 hover:bg-blue-500/10 flex items-center justify-center shrink-0" title={isGuestMode ? "Sign In" : "Sign Out"}>
                                 {isGuestMode ? <Lock className="w-4 h-4 sm:w-5 sm:h-5 hover:scale-110 transition-transform" /> : <LogOut className="w-4 h-4 sm:w-5 sm:h-5 hover:scale-110 transition-transform" />}
                             </button>
                         </div>
@@ -427,12 +427,12 @@ const App = () => {
                     <div className="flex flex-col lg:flex-row gap-8 flex-1 min-h-0">
                         <div className="flex-1 flex flex-col gap-6 h-full">
                             {error && (
-                                <div className="p-5 bg-rose-500/10 border border-rose-500/30 text-rose-500 rounded-2xl text-xs font-bold flex items-center gap-3 animate-in fade-in slide-in-from-top-4">
+                                <div className="p-5 bg-blue-500/10 border border-blue-500/30 text-blue-500 rounded-2xl text-xs font-bold flex items-center gap-3 animate-in fade-in slide-in-from-top-4">
                                     <AlertCircle className="w-5 h-5 shrink-0" /> {error}
                                 </div>
                             )}
-                            <div className="flex-1 relative group bg-gradient-to-b from-[#0F1118] to-[#0A0B10] rounded-[2.5rem] border border-white/5 shadow-2xl p-1 flex flex-col transition-all duration-500 hover:border-rose-500/30">
-                                <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-rose-500/20 to-transparent"></div>
+                            <div className="flex-1 relative group bg-gradient-to-b from-[#0F1118] to-[#0A0B10] rounded-[2.5rem] border border-white/5 shadow-2xl p-1 flex flex-col transition-all duration-500 hover:border-blue-500/30">
+                                <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-blue-500/20 to-transparent"></div>
                                 <textarea
                                     value={script}
                                     onChange={(e) => {
@@ -453,7 +453,7 @@ const App = () => {
                             </div>
 
                             <div className="shrink-0 bg-[#0F1118]/80 backdrop-blur-xl p-6 rounded-[2.5rem] border border-white/5 flex flex-col sm:flex-row sm:flex-wrap items-center justify-between gap-6 shadow-xl relative overflow-hidden">
-                                <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/5 via-transparent to-rose-500/5 opacity-50"></div>
+                                <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/5 via-transparent to-blue-500/5 opacity-50"></div>
                                 <div className="relative flex flex-wrap items-center gap-6 z-10 w-full sm:w-auto">
                                     <button onClick={() => setEnableSubtitles(!enableSubtitles)} className={`flex items-center justify-center gap-3 px-6 py-3.5 rounded-2xl font-black text-[10px] uppercase transition-all duration-300 ${enableSubtitles ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 shadow-lg shadow-emerald-500/10' : 'bg-black/50 text-slate-500 border border-white/5 hover:bg-white/5 hover:text-slate-300'}`}>
                                         {enableSubtitles ? <ToggleRight className="w-5 h-5" /> : <ToggleLeft className="w-5 h-5" />} Auto Subtitles
@@ -469,11 +469,11 @@ const App = () => {
 
                                 <div className="w-full sm:w-auto flex flex-col sm:flex-row gap-4 relative z-10">
                                     <button onClick={() => setShowVoiceSheet(true)} className="lg:hidden w-full sm:w-auto px-6 py-4 bg-[#0F1118]/80 backdrop-blur-md border border-white/10 hover:bg-white/5 text-slate-300 rounded-2xl font-bold text-xs uppercase flex items-center justify-between gap-3 shadow-lg transition-all active:scale-95">
-                                        <span className="flex items-center gap-2"><Headset className="w-4 h-4 text-rose-500" /> Voice: {VOICE_LIST.find(v => v.id === selectedVoice)?.label || 'Select'}</span>
+                                        <span className="flex items-center gap-2"><Headset className="w-4 h-4 text-blue-500" /> Voice: {VOICE_LIST.find(v => v.id === selectedVoice)?.label || 'Select'}</span>
                                         <ChevronRight className="w-4 h-4" />
                                     </button>
 
-                                    <button onClick={handleGenerateVoice} disabled={isProcessing || !script.trim()} className="w-full sm:w-auto px-8 py-5 bg-gradient-to-r from-rose-600 to-rose-500 rounded-2xl font-black text-white uppercase tracking-widest text-xs flex items-center justify-center gap-3 shadow-xl hover:shadow-rose-600/30 transition-all active:scale-95 disabled:opacity-40 disabled:grayscale">
+                                    <button onClick={handleGenerateVoice} disabled={isProcessing || !script.trim()} className="w-full sm:w-auto px-8 py-5 bg-gradient-to-r from-blue-600 to-blue-500 rounded-2xl font-black text-white uppercase tracking-widest text-xs flex items-center justify-center gap-3 shadow-xl hover:shadow-blue-600/30 transition-all active:scale-95 disabled:opacity-40 disabled:grayscale">
                                         {isProcessing ? <Loader2 className="animate-spin w-5 h-5" /> : <Sparkles className="w-5 h-5" />} {isProcessing ? "Synthesizing..." : "Generate Master"}
                                     </button>
                                 </div>
@@ -482,15 +482,15 @@ const App = () => {
 
                         <div className="w-full lg:w-[460px] shrink-0 flex flex-col gap-6 h-full pb-8 md:pb-0">
                             <div className="hidden lg:block bg-[#0F1118]/80 backdrop-blur-xl p-8 rounded-[2.5rem] border border-white/5 shadow-xl shrink-0 transition-hover duration-500 hover:border-white/10 relative overflow-hidden group">
-                                <div className="absolute top-0 right-0 w-32 h-32 bg-rose-500/5 rounded-full blur-3xl group-hover:bg-rose-500/10 transition-colors duration-700"></div>
-                                <h4 className="text-[10px] font-black uppercase text-slate-500 mb-6 tracking-[0.2em] flex items-center gap-3"><Headset className="w-4 h-4 text-rose-500" /> Voice Models</h4>
+                                <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/5 rounded-full blur-3xl group-hover:bg-blue-500/10 transition-colors duration-700"></div>
+                                <h4 className="text-[10px] font-black uppercase text-slate-500 mb-6 tracking-[0.2em] flex items-center gap-3"><Headset className="w-4 h-4 text-blue-500" /> Voice Models</h4>
                                 {voiceModelsContent}
                             </div>
 
                             <div className="flex-1 bg-gradient-to-br from-[#050505] to-[#0A0B10] p-8 rounded-[2.5rem] border border-white/5 flex flex-col shadow-inner min-h-[160px] relative overflow-hidden group">
-                                <div className="absolute -inset-10 bg-gradient-to-t from-rose-900/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-1000 blur-2xl"></div>
+                                <div className="absolute -inset-10 bg-gradient-to-t from-blue-900/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-1000 blur-2xl"></div>
                                 <h4 className="text-[10px] font-black uppercase text-slate-600 mb-auto tracking-[0.2em] relative z-10 flex items-center gap-2">
-                                    <Eye className="w-3 h-3 text-rose-500/60" /> Subtitle Engine
+                                    <Eye className="w-3 h-3 text-blue-500/60" /> Subtitle Engine
                                 </h4>
                                 <div className="relative z-10 mt-6 flex-1 flex items-center justify-center text-center">
                                     <p className={`text-xl sm:text-2xl font-medium leading-relaxed transition-all duration-500 ${activeSubtitle ? 'text-white drop-shadow-md' : 'text-slate-600 italic'}`}>
@@ -500,16 +500,16 @@ const App = () => {
                             </div>
 
                             {currentAudio && (
-                                <div className="shrink-0 bg-gradient-to-br from-rose-950/40 to-black backdrop-blur-3xl p-8 rounded-[2.5rem] border border-rose-500/30 flex flex-col gap-6 animate-in slide-in-from-bottom-8 fade-in duration-500 shadow-2xl shadow-rose-900/20 relative overflow-hidden">
-                                    <div className="absolute inset-0 bg-rose-500/5 mix-blend-overlay"></div>
-                                    <div className="absolute right-0 top-0 w-32 h-32 bg-rose-500/10 rounded-full blur-3xl"></div>
+                                <div className="shrink-0 bg-gradient-to-br from-blue-950/40 to-black backdrop-blur-3xl p-8 rounded-[2.5rem] border border-blue-500/30 flex flex-col gap-6 animate-in slide-in-from-bottom-8 fade-in duration-500 shadow-2xl shadow-blue-900/20 relative overflow-hidden">
+                                    <div className="absolute inset-0 bg-blue-500/5 mix-blend-overlay"></div>
+                                    <div className="absolute right-0 top-0 w-32 h-32 bg-blue-500/10 rounded-full blur-3xl"></div>
                                     <div className="relative z-10 flex items-center gap-4">
-                                        <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-rose-500/20 to-rose-600/5 border border-rose-500/20 text-rose-400 flex items-center justify-center animate-pulse shadow-inner">
+                                        <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-500/20 to-blue-600/5 border border-blue-500/20 text-blue-400 flex items-center justify-center animate-pulse shadow-inner">
                                             <Zap className="w-6 h-6" />
                                         </div>
                                         <div>
                                             <div className="text-white font-bold text-base">Master Export Ready</div>
-                                            <div className="text-[10px] text-rose-400/80 uppercase tracking-widest font-bold mt-1">Lossless Studio Quality</div>
+                                            <div className="text-[10px] text-blue-400/80 uppercase tracking-widest font-bold mt-1">Lossless Studio Quality</div>
                                         </div>
                                     </div>
                                     <button onClick={() => {
@@ -526,11 +526,11 @@ const App = () => {
                                         {isPlayingCurrent ? <PauseCircle className="w-5 h-5" /> : <PlayCircle className="w-5 h-5" />} {isPlayingCurrent ? "Pause Playback" : "Play Master Track"}
                                     </button>
                                     <div className="relative z-10 flex gap-4">
-                                        <a href={currentAudio.url} download="master_audio.wav" className="flex-1 bg-gradient-to-b from-rose-500 to-rose-600 hover:from-rose-400 hover:to-rose-500 text-white py-4 rounded-xl text-[10px] font-black uppercase flex items-center justify-center gap-2 transition-all shadow-lg shadow-rose-600/30"><Download className="w-4 h-4" /> WAV HQ</a>
+                                        <a href={currentAudio.url} download="master_audio.wav" className="flex-1 bg-gradient-to-b from-blue-500 to-blue-600 hover:from-blue-400 hover:to-blue-500 text-white py-4 rounded-xl text-[10px] font-black uppercase flex items-center justify-center gap-2 transition-all shadow-lg shadow-blue-600/30"><Download className="w-4 h-4" /> WAV HQ</a>
                                         {currentAudio.srt && <button onClick={() => {
                                             const b = new Blob([currentAudio.srt], { type: 'text/plain' });
                                             const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = 'subtitles.srt'; a.click();
-                                        }} className="flex-1 bg-black/60 hover:bg-black/80 text-rose-100 py-4 rounded-xl text-[10px] font-black uppercase border border-rose-500/30 flex items-center justify-center gap-2 transition-colors hover:border-rose-500/50"><FileCode className="w-4 h-4 text-rose-400" /> SRT</button>}
+                                        }} className="flex-1 bg-black/60 hover:bg-black/80 text-blue-100 py-4 rounded-xl text-[10px] font-black uppercase border border-blue-500/30 flex items-center justify-center gap-2 transition-colors hover:border-blue-500/50"><FileCode className="w-4 h-4 text-blue-400" /> SRT</button>}
                                     </div>
                                 </div>
                             )}
@@ -545,14 +545,14 @@ const App = () => {
                             </div>
                             <h3 className="text-xl font-black text-white uppercase tracking-widest mb-2">Vault is Empty</h3>
                             <p className="text-sm font-medium text-slate-500 max-w-sm">You haven't generated any studio audio yet. Go back to the studio to brew some magic.</p>
-                            <button onClick={() => setActiveTab('studio')} className="mt-8 px-8 py-3 bg-rose-600/10 hover:bg-rose-600/20 text-rose-500 hover:text-rose-400 rounded-xl font-black uppercase tracking-widest text-[10px] transition-colors border border-rose-500/20">Go to Studio</button>
+                            <button onClick={() => setActiveTab('studio')} className="mt-8 px-8 py-3 bg-blue-600/10 hover:bg-blue-600/20 text-blue-500 hover:text-blue-400 rounded-xl font-black uppercase tracking-widest text-[10px] transition-colors border border-blue-500/20">Go to Studio</button>
                         </div>
                     ) : (
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 animate-in fade-in duration-500">
                             {vaultItems.map(item => (
-                                <div key={item.timestamp} className="bg-[#0F1118] p-6 rounded-[2rem] border border-white/5 flex justify-between items-center group hover:border-rose-500/50 transition-all shadow-xl">
+                                <div key={item.timestamp} className="bg-[#0F1118] p-6 rounded-[2rem] border border-white/5 flex justify-between items-center group hover:border-blue-500/50 transition-all shadow-xl">
                                     <div className="flex items-center gap-6">
-                                        <button onClick={() => { voiceRef.current.src = item.url; setParsedSubtitles(item.srt ? parseSRT(item.srt) : []); voiceRef.current.play(); }} className="w-12 h-12 bg-rose-600/10 text-rose-500 rounded-2xl flex items-center justify-center group-hover:bg-rose-600 group-hover:text-white transition-all shadow-inner"><Play className="w-5 h-5 fill-current ml-1" /></button>
+                                        <button onClick={() => { voiceRef.current.src = item.url; setParsedSubtitles(item.srt ? parseSRT(item.srt) : []); voiceRef.current.play(); }} className="w-12 h-12 bg-blue-600/10 text-blue-500 rounded-2xl flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white transition-all shadow-inner"><Play className="w-5 h-5 fill-current ml-1" /></button>
                                         <div><div className="text-sm font-bold text-white italic line-clamp-1">"{item.text}..."</div><div className="text-[9px] uppercase font-black text-slate-600 mt-1 tracking-widest">{item.voice} • {item.date}</div></div>
                                     </div>
                                     <a href={item.url} download className="p-3 text-slate-500 hover:text-white transition-colors"><Download className="w-5 h-5" /></a>

@@ -136,16 +136,16 @@ export default function Auth({ onGuestLogin }) {
             <Toaster position="top-center" toastOptions={{ style: { background: '#1c1c24', color: '#fff', border: '1px solid rgba(255,255,255,0.1)' } }} />
 
             {/* Background Effects */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-rose-600/5 rounded-full blur-[120px] pointer-events-none"></div>
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-blue-600/5 rounded-full blur-[120px] pointer-events-none"></div>
 
             <div className="w-full max-w-md relative z-10">
                 <div className="mb-10 text-center">
-                    <h2 className="text-4xl font-black italic text-white uppercase tracking-tighter mb-2">VOKAL <span className="text-rose-500">PRO</span></h2>
+                    <h2 className="text-4xl font-black italic text-white uppercase tracking-tighter mb-2">VOKAL <span className="text-blue-500">PRO</span></h2>
                     <p className="text-[10px] font-black uppercase text-slate-500 tracking-[0.3em]">Studio Edition • Access Portal</p>
                 </div>
 
                 <div className="bg-[#0F1118]/80 backdrop-blur-3xl p-10 rounded-[2.5rem] border border-white/5 shadow-2xl relative overflow-hidden">
-                    <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-rose-500/30 to-transparent"></div>
+                    <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-blue-500/30 to-transparent"></div>
 
                     {/* Google Login */}
                     <button type="button" onClick={handleGoogleAuth} disabled={loading} className="w-full py-4 mb-6 bg-white hover:bg-slate-200 text-black rounded-2xl font-black uppercase tracking-widest text-xs flex items-center justify-center gap-3 shadow-xl transition-all disabled:opacity-50">
@@ -160,10 +160,10 @@ export default function Auth({ onGuestLogin }) {
 
                     {/* Auth Toggle */}
                     <div className="flex bg-black/40 p-1.5 rounded-2xl border border-white/5 mb-8">
-                        <button onClick={() => setAuthMethod('email')} className={`flex-1 py-3 rounded-xl text-[10px] font-black uppercase transition-all flex items-center justify-center gap-2 ${authMethod === 'email' ? 'bg-rose-600 text-white shadow-lg shadow-rose-600/20' : 'text-slate-500 hover:text-white'}`}>
+                        <button onClick={() => setAuthMethod('email')} className={`flex-1 py-3 rounded-xl text-[10px] font-black uppercase transition-all flex items-center justify-center gap-2 ${authMethod === 'email' ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/20' : 'text-slate-500 hover:text-white'}`}>
                             <Mail className="w-4 h-4" /> Email
                         </button>
-                        <button onClick={() => setAuthMethod('phone')} className={`flex-1 py-3 rounded-xl text-[10px] font-black uppercase transition-all flex items-center justify-center gap-2 ${authMethod === 'phone' ? 'bg-rose-600 text-white shadow-lg shadow-rose-600/20' : 'text-slate-500 hover:text-white'}`}>
+                        <button onClick={() => setAuthMethod('phone')} className={`flex-1 py-3 rounded-xl text-[10px] font-black uppercase transition-all flex items-center justify-center gap-2 ${authMethod === 'phone' ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/20' : 'text-slate-500 hover:text-white'}`}>
                             <Phone className="w-4 h-4" /> Phone
                         </button>
                     </div>
@@ -175,45 +175,45 @@ export default function Auth({ onGuestLogin }) {
                                 {!isLogin && (
                                     <div className="relative group">
                                         <div className="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
-                                            <User className="h-5 w-5 text-slate-500 group-focus-within:text-rose-500 transition-colors" />
+                                            <User className="h-5 w-5 text-slate-500 group-focus-within:text-blue-500 transition-colors" />
                                         </div>
                                         <input type="text" required placeholder="Full Name" value={name} onChange={(e) => setName(e.target.value)}
-                                            className="w-full bg-black/50 border border-white/10 rounded-2xl py-4 pl-14 pr-5 outline-none focus:border-rose-500/50 focus:bg-white/5 text-white placeholder:text-slate-600 transition-all font-medium text-sm" />
+                                            className="w-full bg-black/50 border border-white/10 rounded-2xl py-4 pl-14 pr-5 outline-none focus:border-blue-500/50 focus:bg-white/5 text-white placeholder:text-slate-600 transition-all font-medium text-sm" />
                                     </div>
                                 )}
                                 <div className="relative group">
                                     <div className="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
-                                        <Mail className="h-5 w-5 text-slate-500 group-focus-within:text-rose-500 transition-colors" />
+                                        <Mail className="h-5 w-5 text-slate-500 group-focus-within:text-blue-500 transition-colors" />
                                     </div>
                                     <input type="email" required placeholder="Email Address" value={email} onChange={(e) => setEmail(e.target.value)}
-                                        className="w-full bg-black/50 border border-white/10 rounded-2xl py-4 pl-14 pr-5 outline-none focus:border-rose-500/50 focus:bg-white/5 text-white placeholder:text-slate-600 transition-all font-medium text-sm" />
+                                        className="w-full bg-black/50 border border-white/10 rounded-2xl py-4 pl-14 pr-5 outline-none focus:border-blue-500/50 focus:bg-white/5 text-white placeholder:text-slate-600 transition-all font-medium text-sm" />
                                 </div>
                                 <div className="relative group">
                                     <div className="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
-                                        <Lock className="h-5 w-5 text-slate-500 group-focus-within:text-rose-500 transition-colors" />
+                                        <Lock className="h-5 w-5 text-slate-500 group-focus-within:text-blue-500 transition-colors" />
                                     </div>
                                     <input type="password" required placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)}
-                                        className="w-full bg-black/50 border border-white/10 rounded-2xl py-4 pl-14 pr-5 outline-none focus:border-rose-500/50 focus:bg-white/5 text-white placeholder:text-slate-600 transition-all font-medium text-sm" />
+                                        className="w-full bg-black/50 border border-white/10 rounded-2xl py-4 pl-14 pr-5 outline-none focus:border-blue-500/50 focus:bg-white/5 text-white placeholder:text-slate-600 transition-all font-medium text-sm" />
                                 </div>
                             </div>
 
                             {isLogin && (
                                 <div className="flex items-center justify-between text-xs font-semibold text-slate-500 px-1">
                                     <label className="flex items-center gap-2 cursor-pointer hover:text-white transition-colors">
-                                        <input type="checkbox" checked={rememberMe} onChange={(e) => setRememberMe(e.target.checked)} className="rounded border-white/10 bg-black/50 text-rose-500 focus:ring-rose-500 accent-rose-500" />
+                                        <input type="checkbox" checked={rememberMe} onChange={(e) => setRememberMe(e.target.checked)} className="rounded border-white/10 bg-black/50 text-blue-500 focus:ring-blue-500 accent-blue-500" />
                                         Remember me
                                     </label>
-                                    <button type="button" onClick={handleForgotPassword} className="hover:text-rose-400 transition-colors">Forgot Password?</button>
+                                    <button type="button" onClick={handleForgotPassword} className="hover:text-blue-400 transition-colors">Forgot Password?</button>
                                 </div>
                             )}
 
-                            <button disabled={loading} type="submit" className="w-full py-4 mt-2 bg-gradient-to-r from-rose-600 to-rose-500 rounded-2xl font-black text-white uppercase tracking-widest text-xs flex items-center justify-center gap-2 shadow-xl hover:shadow-rose-600/30 transition-all disabled:opacity-50">
+                            <button disabled={loading} type="submit" className="w-full py-4 mt-2 bg-gradient-to-r from-blue-600 to-blue-500 rounded-2xl font-black text-white uppercase tracking-widest text-xs flex items-center justify-center gap-2 shadow-xl hover:shadow-blue-600/30 transition-all disabled:opacity-50">
                                 {loading ? 'Processing...' : isLogin ? 'Sign In To Studio' : 'Create Account'}
                                 {!loading && <ChevronRight className="w-4 h-4" />}
                             </button>
 
                             <div className="text-center mt-6">
-                                <button type="button" onClick={() => setIsLogin(!isLogin)} className="text-xs font-semibold text-slate-500 hover:text-rose-400 transition-colors">
+                                <button type="button" onClick={() => setIsLogin(!isLogin)} className="text-xs font-semibold text-slate-500 hover:text-blue-400 transition-colors">
                                     {isLogin ? "Don't have an account? Sign Up" : "Already have an account? Sign In"}
                                 </button>
                             </div>
@@ -227,12 +227,12 @@ export default function Auth({ onGuestLogin }) {
                                 <>
                                     <div className="relative group">
                                         <div className="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
-                                            <Phone className="h-5 w-5 text-slate-500 group-focus-within:text-rose-500 transition-colors" />
+                                            <Phone className="h-5 w-5 text-slate-500 group-focus-within:text-blue-500 transition-colors" />
                                         </div>
                                         <input type="tel" required placeholder="+91 99999 99999" value={phone} onChange={(e) => setPhone(e.target.value)}
-                                            className="w-full bg-black/50 border border-white/10 rounded-2xl py-4 pl-14 pr-5 outline-none focus:border-rose-500/50 focus:bg-white/5 text-white placeholder:text-slate-600 transition-all font-medium text-sm tracking-widest" />
+                                            className="w-full bg-black/50 border border-white/10 rounded-2xl py-4 pl-14 pr-5 outline-none focus:border-blue-500/50 focus:bg-white/5 text-white placeholder:text-slate-600 transition-all font-medium text-sm tracking-widest" />
                                     </div>
-                                    <button disabled={loading} type="submit" className="w-full py-4 bg-gradient-to-r from-rose-600 to-rose-500 rounded-2xl font-black text-white uppercase tracking-widest text-xs flex items-center justify-center gap-2 shadow-xl hover:shadow-rose-600/30 transition-all disabled:opacity-50">
+                                    <button disabled={loading} type="submit" className="w-full py-4 bg-gradient-to-r from-blue-600 to-blue-500 rounded-2xl font-black text-white uppercase tracking-widest text-xs flex items-center justify-center gap-2 shadow-xl hover:shadow-blue-600/30 transition-all disabled:opacity-50">
                                         {loading ? 'Sending OTP...' : 'Send OTP Code'}
                                         {!loading && <Zap className="w-4 h-4" />}
                                     </button>
@@ -250,7 +250,7 @@ export default function Auth({ onGuestLogin }) {
                                         {loading ? 'Verifying...' : 'Verify & Enter'}
                                     </button>
                                     <div className="text-center mt-4">
-                                        <button type="button" onClick={() => setShowOtpInput(false)} className="text-xs font-semibold text-slate-500 hover:text-rose-400 transition-colors">
+                                        <button type="button" onClick={() => setShowOtpInput(false)} className="text-xs font-semibold text-slate-500 hover:text-blue-400 transition-colors">
                                             Wrong Number? Go Back
                                         </button>
                                     </div>
@@ -262,8 +262,8 @@ export default function Auth({ onGuestLogin }) {
                 </div>
 
                 <div className="mt-8 flex flex-col items-center justify-center gap-4 text-[10px] font-bold uppercase tracking-widest text-slate-600">
-                    <button type="button" onClick={onGuestLogin} className="py-3 px-8 bg-white/5 hover:bg-white/10 text-white rounded-full transition-all flex items-center gap-3 border border-white/5 hover:border-rose-500/30 shadow-lg group">
-                        <Zap className="w-4 h-4 text-rose-500 shadow-rose-500/50 group-hover:scale-110 transition-transform" /> Try Studio as Guest
+                    <button type="button" onClick={onGuestLogin} className="py-3 px-8 bg-white/5 hover:bg-white/10 text-white rounded-full transition-all flex items-center gap-3 border border-white/5 hover:border-blue-500/30 shadow-lg group">
+                        <Zap className="w-4 h-4 text-blue-500 shadow-blue-500/50 group-hover:scale-110 transition-transform" /> Try Studio as Guest
                     </button>
                     <div className="flex items-center gap-2 mt-2 opacity-50"><AlertCircle className="w-3 h-3" /> Secure Google Firebase Authentication</div>
                 </div>
