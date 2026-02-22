@@ -284,10 +284,10 @@ const App = () => {
 
             {showPlans && (
                 <div className="fixed inset-0 z-[2000] bg-black/80 backdrop-blur-3xl flex items-center justify-center p-4">
-                    <div className="bg-[#0F1118] border border-white/5 rounded-[2.5rem] w-full max-w-5xl shadow-2xl relative overflow-hidden animate-in fade-in zoom-in-95 duration-500">
+                    <div className="bg-[#0F1118] border border-white/5 rounded-[2.5rem] w-full max-w-5xl shadow-2xl relative overflow-hidden animate-in fade-in zoom-in-95 duration-500 max-h-[90vh] flex flex-col">
                         <button onClick={() => setShowPlans(false)} className="absolute top-6 right-6 p-2 rounded-full bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white transition-colors z-10"><X className="w-6 h-6" /></button>
                         <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 via-transparent to-blue-900/10 pointer-events-none"></div>
-                        <div className="p-12">
+                        <div className="p-8 sm:p-12 overflow-y-auto flex-1 custom-scrollbar">
                             <div className="text-center mb-12 relative z-10">
                                 <h2 className="text-4xl font-black italic text-white uppercase tracking-tighter mb-4">VOKAL <span className="text-blue-500">PRO</span> PLANS</h2>
                                 <p className="text-slate-400 max-w-xl mx-auto font-medium">Choose a studio plan to unlock high-fidelity AI voice generation and cinematic subtitle sync capabilities.</p>
@@ -437,7 +437,7 @@ const App = () => {
                 </div>
             </aside>
 
-            <main className="flex-1 p-6 md:p-12 overflow-y-auto flex flex-col h-full min-h-0 order-first md:order-last">
+            <main className="flex-1 p-4 sm:p-6 md:p-12 overflow-y-auto flex flex-col min-h-0 order-first md:order-last">
                 <header className="flex flex-col lg:flex-row justify-between items-center mb-8 shrink-0 gap-6">
                     <div className="flex flex-col items-center lg:items-start text-center lg:text-left">
                         <h2 className="text-2xl font-black italic text-white uppercase tracking-tighter">VOKAL <span className="text-blue-500">PRO</span></h2>
@@ -486,8 +486,8 @@ const App = () => {
                 </header>
 
                 {activeTab === 'studio' && (
-                    <div className="flex flex-col lg:flex-row gap-8 flex-1 min-h-0">
-                        <div className="flex-1 flex flex-col gap-6 h-full">
+                    <div className="flex flex-col lg:flex-row gap-6 flex-1">
+                        <div className="flex flex-col gap-4">
                             {error && (
                                 <div className="p-5 bg-blue-500/10 border border-blue-500/30 text-blue-500 rounded-2xl text-xs font-bold flex items-center gap-3 animate-in fade-in slide-in-from-top-4">
                                     <AlertCircle className="w-5 h-5 shrink-0" /> {error}
@@ -510,7 +510,7 @@ const App = () => {
                                         }
                                     }}
                                     placeholder="Type or paste your script here..."
-                                    className="flex-1 w-full min-h-[150px] lg:h-auto bg-transparent p-6 sm:p-10 outline-none text-lg sm:text-xl lg:text-2xl font-medium text-slate-100 resize-none transition-all leading-relaxed placeholder:text-slate-700 custom-scrollbar"
+                                    className="w-full min-h-[120px] max-h-[220px] lg:min-h-[300px] bg-transparent p-5 sm:p-8 outline-none text-base sm:text-lg lg:text-2xl font-medium text-slate-100 resize-none transition-all leading-relaxed placeholder:text-slate-700 custom-scrollbar"
                                 />
                             </div>
 
