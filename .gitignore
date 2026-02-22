@@ -1,0 +1,22 @@
+node_modules
+.env
+.env.*
+.DS_Store
+
+# build output
+dist
+dist-ssr
+*.local
+
+# test reports
+coverage
+
+# IDEs and editors
+.idea
+.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+firebase-debug.log
