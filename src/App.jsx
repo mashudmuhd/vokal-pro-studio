@@ -379,29 +379,33 @@ const App = () => {
                         .bar5{animation:bar5 1s ease-in-out infinite 0.2s}
                     `}</style>
 
-                    {/* Background radial glow */}
-                    <div style={{ position: 'absolute', width: '420px', height: '420px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(37,99,235,0.18) 0%, transparent 70%)', animation: 'glow-pulse 2.5s ease-in-out infinite' }}></div>
+                    {/* === Centered circle group: rings + mic centered together === */}
+                    <div style={{ position: 'relative', width: '320px', height: '320px', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '40px', zIndex: 10, flexShrink: 0 }}>
 
-                    {/* Outer spinning ring */}
-                    <div style={{ position: 'absolute', width: '320px', height: '320px', borderRadius: '50%', border: '1px solid rgba(59,130,246,0.2)', animation: 'spin-slow 12s linear infinite' }} >
-                        <div style={{ position: 'absolute', top: '-4px', left: '50%', transform: 'translateX(-50%)', width: '8px', height: '8px', borderRadius: '50%', background: '#3b82f6', boxShadow: '0 0 14px 4px #3b82f6' }}></div>
-                    </div>
+                        {/* Background radial glow */}
+                        <div style={{ position: 'absolute', inset: 0, borderRadius: '50%', background: 'radial-gradient(circle, rgba(37,99,235,0.18) 0%, transparent 70%)', animation: 'glow-pulse 2.5s ease-in-out infinite' }}></div>
 
-                    {/* Middle spinning ring reverse */}
-                    <div style={{ position: 'absolute', width: '240px', height: '240px', borderRadius: '50%', border: '1px solid rgba(99,102,241,0.25)', animation: 'spin-slow-rev 8s linear infinite' }}>
-                        <div style={{ position: 'absolute', bottom: '-4px', left: '50%', transform: 'translateX(-50%)', width: '6px', height: '6px', borderRadius: '50%', background: '#818cf8', boxShadow: '0 0 10px 3px #818cf8' }}></div>
-                    </div>
+                        {/* Outer spinning ring */}
+                        <div style={{ position: 'absolute', width: '320px', height: '320px', borderRadius: '50%', border: '1px solid rgba(59,130,246,0.2)', animation: 'spin-slow 12s linear infinite' }}>
+                            <div style={{ position: 'absolute', top: '-4px', left: '50%', transform: 'translateX(-50%)', width: '8px', height: '8px', borderRadius: '50%', background: '#3b82f6', boxShadow: '0 0 14px 4px #3b82f6' }}></div>
+                        </div>
 
-                    {/* Inner glow ring */}
-                    <div style={{ position: 'absolute', width: '160px', height: '160px', borderRadius: '50%', border: '1px solid rgba(59,130,246,0.15)', animation: 'spin-slow 6s linear infinite' }}></div>
+                        {/* Middle spinning ring reverse */}
+                        <div style={{ position: 'absolute', width: '240px', height: '240px', borderRadius: '50%', border: '1px solid rgba(99,102,241,0.25)', animation: 'spin-slow-rev 8s linear infinite' }}>
+                            <div style={{ position: 'absolute', bottom: '-4px', left: '50%', transform: 'translateX(-50%)', width: '6px', height: '6px', borderRadius: '50%', background: '#818cf8', boxShadow: '0 0 10px 3px #818cf8' }}></div>
+                        </div>
 
-                    {/* Mic orb */}
-                    <div style={{ position: 'relative', zIndex: 10, width: '100px', height: '100px', borderRadius: '50%', background: 'linear-gradient(135deg,#1d4ed8,#3b82f6)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 0 40px 12px rgba(59,130,246,0.35), 0 0 80px 20px rgba(59,130,246,0.12)', animation: 'float-mic 3s ease-in-out infinite', marginBottom: '36px' }}>
-                        <Mic2 style={{ width: '44px', height: '44px', color: 'white' }} />
+                        {/* Inner glow ring */}
+                        <div style={{ position: 'absolute', width: '160px', height: '160px', borderRadius: '50%', border: '1px solid rgba(59,130,246,0.15)', animation: 'spin-slow 6s linear infinite' }}></div>
+
+                        {/* Mic orb — perfectly centered in the rings */}
+                        <div style={{ position: 'relative', zIndex: 5, width: '100px', height: '100px', borderRadius: '50%', background: 'linear-gradient(135deg,#1d4ed8,#3b82f6)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 0 40px 12px rgba(59,130,246,0.35), 0 0 80px 20px rgba(59,130,246,0.12)', animation: 'float-mic 3s ease-in-out infinite' }}>
+                            <Mic2 style={{ width: '44px', height: '44px', color: 'white' }} />
+                        </div>
                     </div>
 
                     {/* Equalizer bars */}
-                    <div style={{ display: 'flex', alignItems: 'flex-end', gap: '5px', height: '48px', marginBottom: '32px', zIndex: 10 }}>
+                    <div style={{ display: 'flex', alignItems: 'flex-end', gap: '5px', height: '40px', marginBottom: '28px', zIndex: 10 }}>
                         {[['bar1', '#3b82f6'], ['bar2', '#6366f1'], ['bar3', '#3b82f6'], ['bar4', '#60a5fa'], ['bar5', '#818cf8'], ['bar1', '#3b82f6'], ['bar2', '#6366f1']].map(([cls, color], i) => (
                             <div key={i} className={cls} style={{ width: '5px', borderRadius: '3px', background: color, opacity: 0.85 }}></div>
                         ))}
