@@ -359,9 +359,67 @@ const App = () => {
             )}
 
             {!isAudioInitialized && (
-                <div onClick={initializeAudio} className="fixed inset-0 z-[1000] bg-black flex flex-col items-center justify-center cursor-pointer backdrop-blur-xl">
-                    <Mic2 className="w-16 h-16 text-blue-600 animate-pulse mb-6" />
-                    <h1 className="text-xl font-black text-white uppercase tracking-[0.5em]">Tap to Start Studio</h1>
+                <div onClick={initializeAudio} className="fixed inset-0 z-[1000] flex flex-col items-center justify-center cursor-pointer select-none overflow-hidden" style={{ background: 'radial-gradient(ellipse at 50% 60%, #050918 0%, #000 70%)' }}>
+                    <style>{`
+                        @keyframes spin-slow { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+                        @keyframes spin-slow-rev { from { transform: rotate(0deg); } to { transform: rotate(-360deg); } }
+                        @keyframes float-mic { 0%,100% { transform: translateY(0px) scale(1); } 50% { transform: translateY(-14px) scale(1.05); } }
+                        @keyframes bar1 { 0%,100%{height:12px} 50%{height:40px} }
+                        @keyframes bar2 { 0%,100%{height:28px} 50%{height:10px} }
+                        @keyframes bar3 { 0%,100%{height:20px} 25%{height:44px} 75%{height:8px} }
+                        @keyframes bar4 { 0%,100%{height:36px} 40%{height:14px} }
+                        @keyframes bar5 { 0%,100%{height:16px} 60%{height:38px} }
+                        @keyframes glow-pulse { 0%,100%{opacity:0.4;transform:scale(1)} 50%{opacity:0.8;transform:scale(1.08)} }
+                        @keyframes text-shimmer { 0%{background-position:0% 50%} 100%{background-position:200% 50%} }
+                        @keyframes tap-bounce { 0%,100%{transform:translateY(0);opacity:1} 50%{transform:translateY(6px);opacity:0.5} }
+                        .bar1{animation:bar1 0.9s ease-in-out infinite}
+                        .bar2{animation:bar2 0.7s ease-in-out infinite}
+                        .bar3{animation:bar3 1.1s ease-in-out infinite}
+                        .bar4{animation:bar4 0.8s ease-in-out infinite 0.1s}
+                        .bar5{animation:bar5 1s ease-in-out infinite 0.2s}
+                    `}</style>
+
+                    {/* Background radial glow */}
+                    <div style={{ position: 'absolute', width: '420px', height: '420px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(37,99,235,0.18) 0%, transparent 70%)', animation: 'glow-pulse 2.5s ease-in-out infinite' }}></div>
+
+                    {/* Outer spinning ring */}
+                    <div style={{ position: 'absolute', width: '320px', height: '320px', borderRadius: '50%', border: '1px solid rgba(59,130,246,0.2)', animation: 'spin-slow 12s linear infinite' }} >
+                        <div style={{ position: 'absolute', top: '-4px', left: '50%', transform: 'translateX(-50%)', width: '8px', height: '8px', borderRadius: '50%', background: '#3b82f6', boxShadow: '0 0 14px 4px #3b82f6' }}></div>
+                    </div>
+
+                    {/* Middle spinning ring reverse */}
+                    <div style={{ position: 'absolute', width: '240px', height: '240px', borderRadius: '50%', border: '1px solid rgba(99,102,241,0.25)', animation: 'spin-slow-rev 8s linear infinite' }}>
+                        <div style={{ position: 'absolute', bottom: '-4px', left: '50%', transform: 'translateX(-50%)', width: '6px', height: '6px', borderRadius: '50%', background: '#818cf8', boxShadow: '0 0 10px 3px #818cf8' }}></div>
+                    </div>
+
+                    {/* Inner glow ring */}
+                    <div style={{ position: 'absolute', width: '160px', height: '160px', borderRadius: '50%', border: '1px solid rgba(59,130,246,0.15)', animation: 'spin-slow 6s linear infinite' }}></div>
+
+                    {/* Mic orb */}
+                    <div style={{ position: 'relative', zIndex: 10, width: '100px', height: '100px', borderRadius: '50%', background: 'linear-gradient(135deg,#1d4ed8,#3b82f6)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 0 40px 12px rgba(59,130,246,0.35), 0 0 80px 20px rgba(59,130,246,0.12)', animation: 'float-mic 3s ease-in-out infinite', marginBottom: '36px' }}>
+                        <Mic2 style={{ width: '44px', height: '44px', color: 'white' }} />
+                    </div>
+
+                    {/* Equalizer bars */}
+                    <div style={{ display: 'flex', alignItems: 'flex-end', gap: '5px', height: '48px', marginBottom: '32px', zIndex: 10 }}>
+                        {[['bar1', '#3b82f6'], ['bar2', '#6366f1'], ['bar3', '#3b82f6'], ['bar4', '#60a5fa'], ['bar5', '#818cf8'], ['bar1', '#3b82f6'], ['bar2', '#6366f1']].map(([cls, color], i) => (
+                            <div key={i} className={cls} style={{ width: '5px', borderRadius: '3px', background: color, opacity: 0.85 }}></div>
+                        ))}
+                    </div>
+
+                    {/* Title */}
+                    <h1 style={{ fontSize: 'clamp(1rem,5vw,1.5rem)', fontWeight: 900, letterSpacing: '0.35em', textTransform: 'uppercase', zIndex: 10, background: 'linear-gradient(90deg,#60a5fa,#a5b4fc,#3b82f6,#60a5fa)', backgroundSize: '200% auto', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', animation: 'text-shimmer 3s linear infinite', textAlign: 'center', padding: '0 24px' }}>Vokal Pro Studio</h1>
+
+                    {/* Subtitle */}
+                    <p style={{ marginTop: '10px', fontSize: '11px', letterSpacing: '0.25em', textTransform: 'uppercase', color: 'rgba(148,163,184,0.6)', zIndex: 10, fontWeight: 700 }}>AI Voice Engine</p>
+
+                    {/* Tap hint */}
+                    <div style={{ position: 'absolute', bottom: '60px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px', zIndex: 10 }}>
+                        <div style={{ width: '32px', height: '32px', borderRadius: '50%', border: '1.5px solid rgba(59,130,246,0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', animation: 'tap-bounce 1.5s ease-in-out infinite' }}>
+                            <svg width="12" height="14" viewBox="0 0 12 14" fill="none"><path d="M6 1v12M6 13l-4-4M6 13l4-4" stroke="#3b82f6" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
+                        </div>
+                        <span style={{ fontSize: '10px', letterSpacing: '0.3em', color: 'rgba(148,163,184,0.45)', fontWeight: 700, textTransform: 'uppercase' }}>Tap anywhere</span>
+                    </div>
                 </div>
             )}
 
