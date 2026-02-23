@@ -234,8 +234,8 @@ const App = () => {
 
             let voiceName = voiceMap[selectedVoice] || selectedVoice;
             let stylePrompt = (selectedVoice === "Maya" || selectedVoice === "Ahaana")
-                ? "Speak in a mature, maternal, warm, highly expressive Malayalam female tone like KPAC Lalitha."
-                : "Speak in a clear professional voice with deep cinematic bass.";
+                ? "Speak in a natural, warm, and expressive Malayalam female voice at a NORMAL speaking pace. Avoid speaking slowly."
+                : "Speak in a clear, professional male voice with a natural, steady flow at a NORMAL speed. Do not speak slowly.";
 
             const voicePayload = {
                 contents: [{ parts: [{ text: `${stylePrompt}: ${script}` }] }],
