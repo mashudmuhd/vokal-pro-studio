@@ -2,12 +2,12 @@ import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 
 const firebaseConfig = {
-    apiKey: "AIzaSyAwsOIpiopAc2ZnuDrp8eRlj5m_HTq2JaA",
-    authDomain: "vokal-pro-studio-app-2026.firebaseapp.com",
-    projectId: "vokal-pro-studio-app-2026",
-    storageBucket: "vokal-pro-studio-app-2026.firebasestorage.app",
-    messagingSenderId: "390591097726",
-    appId: "1:390591097726:web:fceb62a64f27876578212f"
+    apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+    authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+    projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+    storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+    messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+    appId: import.meta.env.VITE_FIREBASE_APP_ID,
 };
 
 // Initialize Firebase

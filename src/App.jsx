@@ -13,9 +13,8 @@ import { onAuthStateChanged, signOut } from 'firebase/auth';
 import Auth from './Auth';
 import { Toaster, toast } from 'react-hot-toast';
 
-const apiKey = import.meta.env.VITE_GEMINI_API_KEY || "";
-const ttsModel = "gemini-2.5-flash-preview-tts";
-const analysisModel = "gemini-2.5-flash";
+// ✅ No API key on the client — Gemini calls go through our secure Vercel backend proxy.
+const CLOUD_FUNCTION_URL = "https://vokal-pro-api.vercel.app/api/generate";
 
 const SCRIPT_LANGUAGES = [
     { id: 'Malayalam', native: 'മലയാളം' },
@@ -45,7 +44,7 @@ const App = () => {
     const [enableSubtitles, setEnableSubtitles] = useState(false);
     const [showVoiceSheet, setShowVoiceSheet] = useState(false);
     const [error, setError] = useState(null);
-    const [apiKeyValue, setApiKeyValue] = useState(apiKey);
+    // API key is now securely handled server-side via Firebase Cloud Function
 
     const [script, setScript] = useState("മക്കളേ, സുഖമാണോ? എല്ലാവരും ഭക്ഷണം കഴിച്ചോ?");
     const [isProcessing, setIsProcessing] = useState(false);
@@ -158,19 +157,19 @@ const App = () => {
         } catch (e) { console.warn("Engine Unlocked"); }
     };
 
-    const callApi = async (model, payload) => {
-        if (!apiKeyValue) throw new Error("Gemini API Key is missing. Please enter it in the top right.");
-        const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKeyValue}`;
+    // 🔒 All Gemini calls go to our secure Cloud Function — no key on client
+    const callApi = async (type, payload) => {
         let retries = 0;
-        const maxRetries = 5;
+        const maxRetries = 3;
         const attemptFetch = async () => {
-            const res = await fetch(url, {
+            const res = await fetch(CLOUD_FUNCTION_URL, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(payload)
+                body: JSON.stringify({ type, payload })
             });
             if (!res.ok) {
-                if (res.status === 429) {
+                const err = await res.json().catch(() => ({}));
+                if (res.status === 429 || err?.error === 'TOO_MANY_REQUESTS') {
                     throw new Error("Whoops! You're making requests too fast. Please wait a minute and try again.");
                 }
                 if (retries < maxRetries) {
@@ -214,10 +213,10 @@ const App = () => {
             let srtPromise = null;
             if (enableSubtitles) {
                 const srtPrompt = `Generate .SRT subtitles in ${srtLang} for: "${script}"`;
-                srtPromise = callApi(analysisModel, { contents: [{ role: "user", parts: [{ text: srtPrompt }] }] });
+                srtPromise = callApi('analysis', { contents: [{ role: "user", parts: [{ text: srtPrompt }] }] });
             }
 
-            const [vRes, sRes] = await Promise.all([callApi(ttsModel, voicePayload), srtPromise]);
+            const [vRes, sRes] = await Promise.all([callApi('tts', voicePayload), srtPromise]);
             const audioData = vRes.candidates?.[0]?.content?.parts?.[0]?.inlineData;
             const srtText = sRes?.candidates?.[0]?.content?.parts?.[0]?.text || "";
 
