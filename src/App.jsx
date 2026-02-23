@@ -23,6 +23,32 @@ const SCRIPT_LANGUAGES = [
     { id: 'Tamil', native: 'தமிழ்' }
 ];
 
+const GlobalStyles = () => (
+    <style dangerouslySetInnerHTML={{
+        __html: `
+        @keyframes wave {
+            0%, 100% { height: 20%; }
+            50% { height: 100%; }
+        }
+        .animate-wave {
+            animation: wave 1.2s ease-in-out infinite;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.02);
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: rgba(59, 130, 246, 0.5);
+        }
+    `}} />
+);
+
 const SUBTITLE_LANGUAGES = [
     { id: 'English', label: 'English Sub' },
     { id: 'Malayalam', label: 'Malayalam Sub' },
@@ -305,6 +331,7 @@ const App = () => {
 
     return (
         <div className="h-[100dvh] bg-[#08090D] text-slate-300 flex flex-col md:flex-row overflow-hidden font-sans">
+            <GlobalStyles />
             <Toaster position="top-center" toastOptions={{ style: { background: '#1c1c24', color: '#fff', border: '1px solid rgba(255,255,255,0.1)' } }} />
 
             {showPlans && (
@@ -518,8 +545,8 @@ const App = () => {
                                     <AlertCircle className="w-5 h-5 shrink-0" /> {error}
                                 </div>
                             )}
-                            <div className="flex-1 relative group bg-gradient-to-b from-[#0F1118] to-[#0A0B10] rounded-[2.5rem] border border-white/5 shadow-2xl p-1 flex flex-col transition-all duration-500 hover:border-blue-500/30">
-                                <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-blue-500/20 to-transparent"></div>
+                            <div className={`flex-1 relative group bg-gradient-to-b from-[#0F1118] to-[#0A0B10] rounded-[2.5rem] border shadow-2xl p-1 flex flex-col transition-all duration-700 ${isProcessing ? 'border-blue-500/50 shadow-[0_0_40px_rgba(59,130,246,0.2)]' : 'border-white/5 hover:border-blue-500/30'}`}>
+                                {isProcessing && <div className="absolute inset-0 bg-blue-500/5 rounded-[2.5rem] animate-pulse"></div>}
                                 <textarea
                                     value={script}
                                     onChange={(e) => {
@@ -574,53 +601,68 @@ const App = () => {
                                 {voiceModelsContent}
                             </div>
 
-                            <div className="flex-1 bg-gradient-to-br from-[#050505] to-[#0A0B10] p-8 rounded-[2.5rem] border border-white/5 flex flex-col shadow-inner min-h-[160px] relative overflow-hidden group mb-6 lg:mb-0">
-                                <div className="absolute -inset-10 bg-gradient-to-t from-blue-900/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-1000 blur-2xl"></div>
-                                <h4 className="text-[10px] font-black uppercase text-slate-600 mb-auto tracking-[0.2em] relative z-10 flex items-center gap-2">
-                                    <Eye className="w-3 h-3 text-blue-500/60" /> Subtitle Engine
-                                </h4>
-                                <div className="relative z-10 mt-6 flex-1 flex items-center justify-center text-center">
-                                    <p className={`text-xl sm:text-2xl font-medium leading-relaxed transition-all duration-500 ${activeSubtitle ? 'text-white drop-shadow-md' : 'text-slate-600 italic'}`}>
-                                        {activeSubtitle || "Awaiting Audio..."}
-                                    </p>
-                                </div>
-                            </div>
+                            {/* Unified Output Engine Box */}
+                            <div className={`flex-1 flex flex-col p-8 rounded-[2.5rem] border transition-all duration-700 shadow-2xl relative overflow-hidden group ${isProcessing ? 'bg-blue-600/5 border-blue-500/40' : (currentAudio ? 'bg-gradient-to-br from-blue-950/20 to-black border-blue-500/30' : 'bg-gradient-to-br from-[#050505] to-[#0A0B10] border-white/5')}`}>
+                                {/* Background Effects */}
+                                {isProcessing && <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_120%,rgba(59,130,246,0.15),transparent)] animate-pulse"></div>}
+                                {currentAudio && <div className="absolute top-0 right-0 w-48 h-48 bg-blue-500/10 rounded-full blur-[80px] -mr-20 -mt-20"></div>}
 
-                            {currentAudio && (
-                                <div className="shrink-0 bg-gradient-to-br from-blue-950/40 to-black backdrop-blur-3xl p-8 rounded-[2.5rem] border border-blue-500/30 flex flex-col gap-6 animate-in slide-in-from-bottom-8 fade-in duration-500 shadow-2xl shadow-blue-900/20 relative overflow-hidden">
-                                    <div className="absolute inset-0 bg-blue-500/5 mix-blend-overlay"></div>
-                                    <div className="absolute right-0 top-0 w-32 h-32 bg-blue-500/10 rounded-full blur-3xl"></div>
-                                    <div className="relative z-10 flex items-center gap-4">
-                                        <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-500/20 to-blue-600/5 border border-blue-500/20 text-blue-400 flex items-center justify-center animate-pulse shadow-inner">
-                                            <Zap className="w-6 h-6" />
+                                <h4 className="text-[10px] font-black uppercase text-slate-600 mb-auto tracking-[0.2em] relative z-10 flex items-center gap-3">
+                                    {isProcessing ? <Zap className="w-3 h-3 text-blue-400 animate-bounce" /> : <Eye className="w-3 h-3 text-blue-500/60" />}
+                                    {isProcessing ? 'Engine Processing...' : 'Studio Output Engine'}
+                                </h4>
+
+                                <div className="relative z-10 my-8 flex-1 flex flex-col items-center justify-center text-center">
+                                    {isProcessing ? (
+                                        <div className="flex flex-col items-center gap-6">
+                                            <div className="flex items-end gap-1.5 h-16">
+                                                {[...Array(12)].map((_, i) => (
+                                                    <div
+                                                        key={i}
+                                                        className="w-1.5 bg-blue-500 rounded-full animate-wave"
+                                                        style={{ animationDelay: `${i * 0.1}s`, height: '20%' }}
+                                                    ></div>
+                                                ))}
+                                            </div>
+                                            <p className="text-blue-400 text-xs font-black uppercase tracking-[0.3em] animate-pulse">Synthesizing Voice...</p>
                                         </div>
-                                        <div>
-                                            <div className="text-white font-bold text-base">Master Export Ready</div>
-                                            <div className="text-[10px] text-blue-400/80 uppercase tracking-widest font-bold mt-1">Lossless Studio Quality</div>
-                                        </div>
-                                    </div>
-                                    <button onClick={() => {
-                                        if (voiceRef.current.src !== currentAudio.url) {
-                                            voiceRef.current.src = currentAudio.url;
-                                        }
-                                        if (isPlayingCurrent) {
-                                            voiceRef.current.pause();
-                                        } else {
-                                            voiceRef.current.play();
-                                            setIsPlayingCurrent(true);
-                                        }
-                                    }} className="relative z-10 w-full py-5 bg-white text-black hover:bg-slate-200 rounded-2xl font-black uppercase tracking-wider text-xs flex items-center justify-center gap-3 transition-colors shadow-xl">
-                                        {isPlayingCurrent ? <PauseCircle className="w-5 h-5" /> : <PlayCircle className="w-5 h-5" />} {isPlayingCurrent ? "Pause Playback" : "Play Master Track"}
-                                    </button>
-                                    <div className="relative z-10 flex gap-4">
-                                        <a href={currentAudio.url} download="master_audio.wav" className="flex-1 bg-gradient-to-b from-blue-500 to-blue-600 hover:from-blue-400 hover:to-blue-500 text-white py-4 rounded-xl text-[10px] font-black uppercase flex items-center justify-center gap-2 transition-all shadow-lg shadow-blue-600/30"><Download className="w-4 h-4" /> WAV HQ</a>
-                                        {currentAudio.srt && <button onClick={() => {
-                                            const b = new Blob([currentAudio.srt], { type: 'text/plain' });
-                                            const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = 'subtitles.srt'; a.click();
-                                        }} className="flex-1 bg-black/60 hover:bg-black/80 text-blue-100 py-4 rounded-xl text-[10px] font-black uppercase border border-blue-500/30 flex items-center justify-center gap-2 transition-colors hover:border-blue-500/50"><FileCode className="w-4 h-4 text-blue-400" /> SRT</button>}
-                                    </div>
+                                    ) : (
+                                        <>
+                                            <p className={`text-xl sm:text-2xl font-medium leading-relaxed transition-all duration-500 ${activeSubtitle ? 'text-white drop-shadow-lg' : 'text-slate-600 italic'}`}>
+                                                {activeSubtitle || (currentAudio ? "Audio ready for playback" : "Awaiting Audio...")}
+                                            </p>
+
+                                            {currentAudio && !activeSubtitle && !isPlayingCurrent && (
+                                                <div className="mt-4 w-12 h-1 bg-blue-500/20 rounded-full overflow-hidden">
+                                                    <div className="h-full bg-blue-500 w-1/3"></div>
+                                                </div>
+                                            )}
+                                        </>
+                                    )}
                                 </div>
-                            )}
+
+                                {/* Integrated Audio Controls */}
+                                {currentAudio && !isProcessing && (
+                                    <div className="relative z-10 flex flex-col gap-5 animate-in slide-in-from-bottom-4 duration-500">
+                                        <button onClick={() => {
+                                            if (voiceRef.current.src !== currentAudio.url) voiceRef.current.src = currentAudio.url;
+                                            if (isPlayingCurrent) voiceRef.current.pause();
+                                            else { voiceRef.current.play(); setIsPlayingCurrent(true); }
+                                        }} className={`w-full py-4 rounded-2xl font-black uppercase tracking-wider text-[11px] flex items-center justify-center gap-3 transition-all shadow-xl ${isPlayingCurrent ? 'bg-white text-black scale-[0.98]' : 'bg-blue-600 text-white hover:bg-blue-500'}`}>
+                                            {isPlayingCurrent ? <PauseCircle className="w-5 h-5" /> : <PlayCircle className="w-5 h-5" />}
+                                            {isPlayingCurrent ? "Pause Master" : "Play Master Track"}
+                                        </button>
+
+                                        <div className="flex gap-3">
+                                            <a href={currentAudio.url} download="master_audio.wav" className="flex-1 bg-white/5 hover:bg-white/10 text-white py-3.5 rounded-xl text-[9px] font-black uppercase flex items-center justify-center gap-2 transition-all border border-white/5"><Download className="w-4 h-4 text-blue-500" /> WAV</a>
+                                            {currentAudio.srt && <button onClick={() => {
+                                                const b = new Blob([currentAudio.srt], { type: 'text/plain' });
+                                                const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = 'subtitles.srt'; a.click();
+                                            }} className="flex-1 bg-white/5 hover:bg-white/10 text-white py-3.5 rounded-xl text-[9px] font-black uppercase border border-white/5 flex items-center justify-center gap-2 transition-colors"><FileCode className="w-4 h-4 text-emerald-500" /> SRT</button>}
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
                         </div>
                     </div>
                 )}
