@@ -611,7 +611,7 @@ const App = () => {
                             </div>
                         </div>
 
-                        <div className="w-full lg:w-[460px] shrink-0 flex flex-col gap-6 h-full pb-8 md:pb-0">
+                        <div className="w-full lg:w-[460px] shrink-0 flex flex-col gap-6 h-full">
                             <div className="hidden lg:block bg-[#0F1118]/80 backdrop-blur-xl p-8 rounded-[2.5rem] border border-white/5 shadow-xl shrink-0 transition-hover duration-500 hover:border-white/10 relative overflow-hidden group">
                                 <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/5 rounded-full blur-3xl group-hover:bg-blue-500/10 transition-colors duration-700"></div>
                                 <h4 className="text-[10px] font-black uppercase text-slate-500 mb-6 tracking-[0.2em] flex items-center gap-3"><Headset className="w-4 h-4 text-blue-500" /> Voice Models</h4>
@@ -619,7 +619,7 @@ const App = () => {
                             </div>
 
                             {/* Unified Output Engine Box */}
-                            <div className={`flex-1 flex flex-col p-8 rounded-[2.5rem] border transition-all duration-700 shadow-2xl relative overflow-hidden group ${isProcessing ? 'bg-blue-600/5 border-blue-500/40' : (currentAudio ? 'bg-gradient-to-br from-blue-950/20 to-black border-blue-500/30' : 'bg-gradient-to-br from-[#050505] to-[#0A0B10] border-white/5')}`}>
+                            <div className={`shrink-0 lg:flex-1 flex flex-col p-6 sm:p-8 rounded-[2.5rem] border transition-all duration-700 shadow-2xl relative overflow-hidden group ${isProcessing ? 'bg-blue-600/5 border-blue-500/40' : (currentAudio ? 'bg-gradient-to-br from-blue-950/20 to-black border-blue-500/30' : 'bg-gradient-to-br from-[#050505] to-[#0A0B10] border-white/5')}`}>
                                 {/* Background Effects */}
                                 {isProcessing && <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_120%,rgba(59,130,246,0.15),transparent)] animate-pulse"></div>}
                                 {currentAudio && <div className="absolute top-0 right-0 w-48 h-48 bg-blue-500/10 rounded-full blur-[80px] -mr-20 -mt-20"></div>}
