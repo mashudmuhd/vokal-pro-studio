@@ -31,10 +31,10 @@ const SUBTITLE_LANGUAGES = [
 ];
 
 const VOICE_LIST = [
-    { id: "Callirrhoe", label: "Lalitha - Matriarch", type: "Female", desc: "Warm, expressive, maternal storytelling." },
-    { id: "Morgan_Legend", label: "Morgan - The Legend", type: "Ultra Bass", desc: "Legendary voice with deep cinematic resonance." },
-    { id: "Charon", label: "Charon - Deep Slow", type: "Slow Bass", desc: "Deep and slow flow." },
-    { id: "Achernar", label: "Achernar - Calm", type: "Professional", desc: "Clear professional voice." }
+    { id: "Maya", label: "Maya", type: "Female", preview: "/previews/maya.wav", desc: "Warm, expressive, maternal storytelling." },
+    { id: "Francis", label: "Francis", type: "Ultra Bass", preview: "/previews/francis.wav", desc: "Legendary voice with deep cinematic resonance." },
+    { id: "Charan", label: "Charon - Deep Slow", type: "Slow Bass", preview: "/previews/charan.wav", desc: "Deep and slow flow." },
+    { id: "Ahaana", label: "Ahaana", type: "Professional", preview: "/previews/ahana.wav", desc: "Clear professional voice." }
 ];
 
 const App = () => {
@@ -76,6 +76,7 @@ const App = () => {
     }, []);
 
     const voiceRef = useRef(null);
+    const previewRef = useRef(new Audio());
 
     const pcmToWav = (pcmData, sampleRate) => {
         const buffer = new ArrayBuffer(44 + pcmData.length * 2);
@@ -197,8 +198,16 @@ const App = () => {
         if (!script.trim()) return;
         setIsProcessing(true); setError(null);
         try {
-            let voiceName = selectedVoice === "Morgan_Legend" ? "Charon" : selectedVoice;
-            let stylePrompt = selectedVoice === "Callirrhoe"
+            // Map the simple IDs to the actual Gemini voice models
+            const voiceMap = {
+                "Maya": "Aoede", // Warm Female
+                "Francis": "Charon", // Deep Male
+                "Charan": "Charon", // Slow Deep
+                "Ahaana": "Kore"  // Professional Female
+            };
+
+            let voiceName = voiceMap[selectedVoice] || selectedVoice;
+            let stylePrompt = (selectedVoice === "Maya" || selectedVoice === "Ahaana")
                 ? "Speak in a mature, maternal, warm, highly expressive Malayalam female tone like KPAC Lalitha."
                 : "Speak in a clear professional voice with deep cinematic bass.";
 
@@ -240,8 +249,14 @@ const App = () => {
                 setParsedSubtitles(enableSubtitles ? parseSRT(srtText) : []);
                 setVaultItems(prev => [meta, ...prev]);
                 voiceRef.current.src = url;
+                toast.success('Studio Master Generated Successfully!', { icon: '✨' });
             }
-        } catch (e) { setError(e.message); } finally { setIsProcessing(false); }
+        } catch (e) {
+            setError(e.message);
+            toast.error('Generation Failed: ' + e.message, { icon: '❌' });
+        } finally {
+            setIsProcessing(false);
+        }
     };
 
     if (authLoading) return <div className="min-h-screen bg-[#08090D] flex items-center justify-center"><Loader2 className="w-10 h-10 text-blue-500 animate-spin" /></div>;
@@ -255,12 +270,22 @@ const App = () => {
                         onClick={(e) => {
                             e.stopPropagation();
                             if (playingPreview === v.id) {
-                                voiceRef.current.pause();
+                                previewRef.current.pause();
+                                previewRef.current.currentTime = 0;
                                 setPlayingPreview(null);
                             } else {
-                                setPlayingPreview(v.id);
+                                // Stop master if playing
                                 if (isPlayingCurrent) voiceRef.current.pause();
-                                setTimeout(() => setPlayingPreview(null), 3000);
+
+                                // Setup preview
+                                previewRef.current.src = v.preview;
+                                previewRef.current.play().catch(err => {
+                                    console.warn("Preview file missing:", v.preview);
+                                    toast.error(`Preview file missing: ${v.preview}`, { icon: '📂' });
+                                });
+
+                                setPlayingPreview(v.id);
+                                previewRef.current.onended = () => setPlayingPreview(null);
                             }
                         }}
                         className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 transition-colors z-20 hover:scale-105 active:scale-95 ${playingPreview === v.id ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/20' : (selectedVoice === v.id ? 'bg-blue-500 text-white shadow-lg shadow-blue-500/20' : 'bg-white/5 text-slate-400 hover:bg-white/10 group-hover:text-white')}`}
