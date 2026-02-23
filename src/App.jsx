@@ -118,7 +118,7 @@ const App = () => {
                             onClick={() => { confirmDialog.onConfirm(); setConfirmDialog({ ...confirmDialog, show: false }); }}
                             className={`w-full py-4 rounded-xl font-black uppercase tracking-widest text-[10px] transition-all active:scale-95 shadow-xl ${confirmDialog.type === 'danger' ? 'bg-red-500 hover:bg-red-400 text-white shadow-red-500/20' : 'bg-blue-600 hover:bg-blue-500 text-white shadow-blue-600/20'}`}
                         >
-                            Yes, I'm sure
+                            {confirmDialog.confirmText || "Yes, I'm sure"}
                         </button>
                         <button
                             onClick={() => setConfirmDialog({ ...confirmDialog, show: false })}
@@ -608,14 +608,21 @@ const App = () => {
 
                             <button onClick={() => {
                                 if (isGuestMode) {
-                                    setIsGuestMode(false);
-                                    toast.success('Please sign in to continue');
+                                    setConfirmDialog({
+                                        show: true,
+                                        title: 'Exit Guest Mode?',
+                                        message: 'You are currently in Guest/Tryout mode. Exit to sign in to your Pro account?',
+                                        type: 'danger',
+                                        confirmText: 'Exit & Sign In',
+                                        onConfirm: () => setIsGuestMode(false)
+                                    });
                                 } else {
                                     setConfirmDialog({
                                         show: true,
                                         title: 'Sign Out?',
-                                        message: 'Are you sure you want to sign out from Vokal Pro? Any unsaved progress may be lost.',
+                                        message: 'Are you sure you want to sign out from Vokal Pro? Your current session will be closed.',
                                         type: 'danger',
+                                        confirmText: 'Sign Out Now',
                                         onConfirm: () => {
                                             signOut(auth).then(() => {
                                                 toast.success('Signed out successfully');
@@ -879,13 +886,21 @@ const App = () => {
 
                             <button onClick={() => {
                                 if (isGuestMode) {
-                                    setIsGuestMode(false);
+                                    setConfirmDialog({
+                                        show: true,
+                                        title: 'Exit Guest Mode?',
+                                        message: 'Are you sure you want to exit Tryout mode and sign in?',
+                                        type: 'primary',
+                                        confirmText: 'Sign In Now',
+                                        onConfirm: () => setIsGuestMode(false)
+                                    });
                                 } else {
                                     setConfirmDialog({
                                         show: true,
                                         title: 'Sign Out?',
                                         message: 'Are you sure you want to sign out? You will need to log back in to access your pro features.',
                                         type: 'danger',
+                                        confirmText: 'Sign Out Now',
                                         onConfirm: () => {
                                             signOut(auth).then(() => {
                                                 toast.success('Signed out successfully');
