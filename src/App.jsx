@@ -33,7 +33,7 @@ const SUBTITLE_LANGUAGES = [
 const VOICE_LIST = [
     { id: "Maya", label: "Maya", type: "Female", preview: "/previews/maya.wav", desc: "Warm, expressive, maternal storytelling." },
     { id: "Francis", label: "Francis", type: "Ultra Bass", preview: "/previews/francis.wav", desc: "Legendary voice with deep cinematic resonance." },
-    { id: "Charan", label: "Charon - Deep Slow", type: "Slow Bass", preview: "/previews/charan.wav", desc: "Deep and slow flow." },
+    { id: "Charan", label: "Charan", type: "Slow Bass", preview: "/previews/charan.wav", desc: "Deep and slow flow." },
     { id: "Ahaana", label: "Ahaana", type: "Professional", preview: "/previews/ahana.wav", desc: "Clear professional voice." }
 ];
 
@@ -48,7 +48,7 @@ const App = () => {
 
     const [script, setScript] = useState("മക്കളേ, സുഖമാണോ? എല്ലാവരും ഭക്ഷണം കഴിച്ചോ?");
     const [isProcessing, setIsProcessing] = useState(false);
-    const [selectedVoice, setSelectedVoice] = useState("Callirrhoe");
+    const [selectedVoice, setSelectedVoice] = useState("Maya");
     const [vaultItems, setVaultItems] = useState([]);
     const [currentAudio, setCurrentAudio] = useState(null);
     const [parsedSubtitles, setParsedSubtitles] = useState([]);
