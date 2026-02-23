@@ -31,10 +31,10 @@ const SUBTITLE_LANGUAGES = [
 ];
 
 const VOICE_LIST = [
-    { id: "Maya", label: "Maya", type: "Female", preview: "/previews/maya.wav", desc: "Warm, expressive, maternal storytelling." },
-    { id: "Francis", label: "Francis", type: "Ultra Bass", preview: "/previews/francis.wav", desc: "Legendary voice with deep cinematic resonance." },
-    { id: "Charan", label: "Charan", type: "Slow Bass", preview: "/previews/charan.wav", desc: "Deep and slow flow." },
-    { id: "Ahaana", label: "Ahaana", type: "Professional", preview: "/previews/ahana.wav", desc: "Clear professional voice." }
+    { id: "Maya", label: "Maya", type: "Female", preview: "previews/maya.wav", desc: "Warm, expressive, maternal storytelling." },
+    { id: "Francis", label: "Francis", type: "Ultra Bass", preview: "previews/francis.wav", desc: "Legendary voice with deep cinematic resonance." },
+    { id: "Charan", label: "Charan", type: "Slow Bass", preview: "previews/charan.wav", desc: "Deep and slow flow." },
+    { id: "Ahaana", label: "Ahaana", type: "Professional", preview: "previews/ahana.wav", desc: "Clear professional voice." }
 ];
 
 const App = () => {
@@ -277,8 +277,9 @@ const App = () => {
                                 // Stop master if playing
                                 if (isPlayingCurrent) voiceRef.current.pause();
 
-                                // Setup preview
-                                previewRef.current.src = v.preview;
+                                // Setup preview - ensure base path is handled
+                                const basePath = import.meta.env.BASE_URL || "/";
+                                previewRef.current.src = basePath + v.preview;
                                 previewRef.current.play().catch(err => {
                                     console.warn("Preview file missing:", v.preview);
                                     toast.error(`Preview file missing: ${v.preview}`, { icon: '📂' });
