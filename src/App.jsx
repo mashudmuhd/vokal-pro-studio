@@ -611,7 +611,18 @@ const App = () => {
                                     setIsGuestMode(false);
                                     toast.success('Please sign in to continue');
                                 } else {
-                                    signOut(auth).then(() => toast.success('Signed out'));
+                                    setConfirmDialog({
+                                        show: true,
+                                        title: 'Sign Out?',
+                                        message: 'Are you sure you want to sign out from Vokal Pro? Any unsaved progress may be lost.',
+                                        type: 'danger',
+                                        onConfirm: () => {
+                                            signOut(auth).then(() => {
+                                                toast.success('Signed out successfully');
+                                                setActiveTab('studio');
+                                            });
+                                        }
+                                    });
                                 }
                             }} className="p-2 sm:p-2.5 rounded-xl transition-all text-slate-600 hover:text-blue-500 hover:bg-blue-500/10 flex items-center justify-center shrink-0" title={isGuestMode ? "Sign In" : "Sign Out"}>
                                 {isGuestMode ? <Lock className="w-4 h-4 sm:w-5 sm:h-5 hover:scale-110 transition-transform" /> : <LogOut className="w-4 h-4 sm:w-5 sm:h-5 hover:scale-110 transition-transform" />}
