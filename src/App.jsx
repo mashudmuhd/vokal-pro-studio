@@ -484,17 +484,29 @@ const App = () => {
                 </div>
             )}
 
-            <aside className="w-full md:w-20 bg-[#0F1118] border-t md:border-t-0 md:border-r border-white/5 flex md:flex-col items-center py-4 px-6 md:p-0 md:py-10 gap-4 md:gap-8 justify-between shrink-0 z-50 order-last md:order-first">
-                <div className="flex md:flex-col gap-4 md:gap-8 items-center w-full md:w-auto justify-between md:justify-start">
-                    <div className="w-10 h-10 bg-blue-600 rounded-xl hidden md:flex items-center justify-center shadow-lg"><Volume2 className="text-white w-5 h-5" /></div>
-                    <nav className="flex md:flex-col gap-2 md:gap-6 w-full md:w-auto justify-center">
-                        <button onClick={() => setActiveTab('studio')} className={`p-4 rounded-xl transition-all flex-1 md:flex-none flex justify-center ${activeTab === 'studio' ? 'bg-blue-600 text-white shadow-xl shadow-blue-600/20' : 'text-slate-600 hover:bg-white/5'}`}><Layout /></button>
-                        <button onClick={() => setActiveTab('vault')} className={`p-4 rounded-xl transition-all flex-1 md:flex-none flex justify-center ${activeTab === 'vault' ? 'bg-blue-600 text-white shadow-xl shadow-blue-600/20' : 'text-slate-600 hover:bg-white/5'}`}><HistoryIcon /></button>
+            <aside className="fixed bottom-6 left-1/2 -translate-x-1/2 md:static md:translate-x-0 w-[92%] max-w-[400px] md:w-24 bg-[#0F1118]/80 backdrop-blur-2xl border border-white/10 md:border-none md:bg-transparent rounded-[2.5rem] md:rounded-none flex md:flex-col items-center py-4 px-8 md:py-12 gap-4 md:gap-12 justify-center z-50 shadow-2xl shadow-black/80 md:shadow-none">
+                <div className="flex md:flex-col gap-8 md:gap-14 items-center w-full md:w-auto justify-around md:justify-start">
+                    <div className="w-12 h-12 bg-blue-600 rounded-2xl hidden md:flex items-center justify-center shadow-lg shadow-blue-600/20 mb-4"><Volume2 className="text-white w-6 h-6" /></div>
+                    <nav className="flex md:flex-col gap-10 md:gap-12 w-full md:w-auto justify-around md:justify-center">
+                        <button onClick={() => setActiveTab('studio')} className={`flex flex-col items-center gap-2.5 group transition-all duration-300 ${activeTab === 'studio' ? 'text-blue-500' : 'text-slate-600 hover:text-slate-400'}`}>
+                            <div className={`p-4 rounded-[1.5rem] transition-all duration-300 relative ${activeTab === 'studio' ? 'bg-blue-600 text-white shadow-xl shadow-blue-600/40 ring-4 ring-blue-500/10' : 'bg-white/5 text-slate-500 md:bg-transparent md:hover:bg-white/5'}`}>
+                                <Layout className="w-6 h-6" />
+                                {activeTab === 'studio' && <div className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-1.5 h-1.5 bg-white rounded-full md:bg-blue-500"></div>}
+                            </div>
+                            <span className={`text-[10px] font-black uppercase tracking-[0.2em] transition-all duration-300 ${activeTab === 'studio' ? 'opacity-100 translate-y-0' : 'opacity-40 -translate-y-1'}`}>Studio</span>
+                        </button>
+                        <button onClick={() => setActiveTab('vault')} className={`flex flex-col items-center gap-2.5 group transition-all duration-300 ${activeTab === 'vault' ? 'text-blue-500' : 'text-slate-600 hover:text-slate-400'}`}>
+                            <div className={`p-4 rounded-[1.5rem] transition-all duration-300 relative ${activeTab === 'vault' ? 'bg-blue-600 text-white shadow-xl shadow-blue-600/40 ring-4 ring-blue-500/10' : 'bg-white/5 text-slate-500 md:bg-transparent md:hover:bg-white/5'}`}>
+                                <HistoryIcon className="w-6 h-6" />
+                                {activeTab === 'vault' && <div className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-1.5 h-1.5 bg-white rounded-full md:bg-blue-500"></div>}
+                            </div>
+                            <span className={`text-[10px] font-black uppercase tracking-[0.2em] transition-all duration-300 ${activeTab === 'vault' ? 'opacity-100 translate-y-0' : 'opacity-40 -translate-y-1'}`}>Vault</span>
+                        </button>
                     </nav>
                 </div>
             </aside>
 
-            <main className="flex-1 p-4 sm:p-6 md:p-12 overflow-y-auto flex flex-col min-h-0 order-first md:order-last">
+            <main className="flex-1 p-6 sm:p-8 md:p-12 pb-32 md:pb-12 overflow-y-auto flex flex-col min-h-0 order-first md:order-last custom-scrollbar">
                 <header className="flex flex-col lg:flex-row justify-between items-center mb-8 shrink-0 gap-6">
                     <div className="flex flex-col items-center lg:items-start text-center lg:text-left">
                         <h2 className="text-2xl font-black italic text-white uppercase tracking-tighter">VOKAL <span className="text-blue-500">PRO</span></h2>
