@@ -91,6 +91,7 @@ const App = () => {
     const [hasPlan, setHasPlan] = useState(false);
     const [showPlans, setShowPlans] = useState(false);
     const [credits, setCredits] = useState(60);
+    const [confirmDialog, setConfirmDialog] = useState({ show: false, title: '', message: '', onConfirm: null, type: 'danger' });
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -100,6 +101,36 @@ const App = () => {
         });
         return unsubscribe;
     }, []);
+
+    const ConfirmDialog = () => {
+        if (!confirmDialog.show) return null;
+        return (
+            <div className="fixed inset-0 z-[2000] flex items-center justify-center p-6 animate-in fade-in duration-300">
+                <div className="absolute inset-0 bg-black/90 backdrop-blur-md" onClick={() => setConfirmDialog({ ...confirmDialog, show: false })}></div>
+                <div className="relative w-full max-w-sm bg-[#0F1118] border border-white/10 rounded-[2.5rem] p-8 shadow-2xl animate-in zoom-in-95 duration-300">
+                    <div className={`w-16 h-16 rounded-2xl flex items-center justify-center mb-6 mx-auto ${confirmDialog.type === 'danger' ? 'bg-red-500/10 text-red-500' : 'bg-blue-500/10 text-blue-500'}`}>
+                        {confirmDialog.type === 'danger' ? <LogOut className="w-8 h-8" /> : <Star className="w-8 h-8" />}
+                    </div>
+                    <h3 className="text-xl font-black text-white uppercase tracking-widest text-center mb-3">{confirmDialog.title}</h3>
+                    <p className="text-slate-400 text-sm font-medium text-center mb-8 leading-relaxed px-2">{confirmDialog.message}</p>
+                    <div className="flex flex-col gap-3">
+                        <button
+                            onClick={() => { confirmDialog.onConfirm(); setConfirmDialog({ ...confirmDialog, show: false }); }}
+                            className={`w-full py-4 rounded-xl font-black uppercase tracking-widest text-[10px] transition-all active:scale-95 shadow-xl ${confirmDialog.type === 'danger' ? 'bg-red-500 hover:bg-red-400 text-white shadow-red-500/20' : 'bg-blue-600 hover:bg-blue-500 text-white shadow-blue-600/20'}`}
+                        >
+                            Yes, I'm sure
+                        </button>
+                        <button
+                            onClick={() => setConfirmDialog({ ...confirmDialog, show: false })}
+                            className="w-full py-4 bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white rounded-xl font-black uppercase tracking-widest text-[10px] transition-all border border-white/5"
+                        >
+                            No, Cancel
+                        </button>
+                    </div>
+                </div>
+            </div>
+        );
+    };
 
     const voiceRef = useRef(null);
     const previewRef = useRef(new Audio());
@@ -337,6 +368,7 @@ const App = () => {
     return (
         <div className="h-[100dvh] bg-[#08090D] text-slate-300 flex flex-col md:flex-row overflow-hidden font-sans">
             <GlobalStyles />
+            <ConfirmDialog />
             <Toaster position="top-center" toastOptions={{ style: { background: '#1c1c24', color: '#fff', border: '1px solid rgba(255,255,255,0.1)' } }} />
 
             {showPlans && (
@@ -360,7 +392,17 @@ const App = () => {
                                         <li className="flex gap-3 text-slate-300 text-sm"><CheckCircle2 className="w-5 h-5 text-emerald-500 shrink-0" /> 3 Audio Generations</li>
                                         <li className="flex gap-3 text-slate-300 text-sm"><CheckCircle2 className="w-5 h-5 text-emerald-500 shrink-0" /> Standard Quality</li>
                                     </ul>
-                                    <button onClick={() => { setHasPlan(true); setShowPlans(false); toast.success('Starter Plan Activated!', { icon: '💳' }); }} className="w-full py-4 bg-white/5 hover:bg-emerald-500 hover:text-white text-slate-300 rounded-xl font-bold uppercase tracking-widest transition-all">Buy Now</button>
+                                    <button onClick={() => {
+                                        setConfirmDialog({
+                                            show: true,
+                                            title: 'Activate Starter',
+                                            message: 'Are you sure you want to activate the Starter Plan?',
+                                            type: 'primary',
+                                            onConfirm: () => {
+                                                setHasPlan(true); setShowPlans(false); toast.success('Starter Plan Activated!', { icon: '💳' });
+                                            }
+                                        });
+                                    }} className="w-full py-4 bg-white/5 hover:bg-emerald-500 hover:text-white text-slate-300 rounded-xl font-bold uppercase tracking-widest transition-all">Buy Now</button>
                                 </div>
                                 {/* Pro Plan */}
                                 <div className="bg-gradient-to-b from-blue-900/40 to-black/80 border border-blue-500/30 rounded-3xl p-8 flex flex-col relative transform md:-translate-y-4 shadow-2xl shadow-blue-900/20">
@@ -374,7 +416,17 @@ const App = () => {
                                         <li className="flex gap-3 text-slate-300 text-sm"><CheckCircle2 className="w-5 h-5 text-blue-500 shrink-0" /> Cinematic Vocals</li>
                                         <li className="flex gap-3 text-slate-300 text-sm"><CheckCircle2 className="w-5 h-5 text-blue-500 shrink-0" /> SRT Subtitle Export</li>
                                     </ul>
-                                    <button onClick={() => { setHasPlan(true); setShowPlans(false); toast.success('Creator Plan Activated!', { icon: '💳' }); }} className="w-full py-4 bg-blue-600 hover:bg-blue-500 text-white shadow-xl shadow-blue-600/20 rounded-xl font-bold uppercase tracking-widest transition-all">Buy Creator</button>
+                                    <button onClick={() => {
+                                        setConfirmDialog({
+                                            show: true,
+                                            title: 'Activate Creator',
+                                            message: 'Are you sure you want to activate the Creator Plan?',
+                                            type: 'primary',
+                                            onConfirm: () => {
+                                                setHasPlan(true); setShowPlans(false); toast.success('Creator Plan Activated!', { icon: '💳' });
+                                            }
+                                        });
+                                    }} className="w-full py-4 bg-blue-600 hover:bg-blue-500 text-white shadow-xl shadow-blue-600/20 rounded-xl font-bold uppercase tracking-widest transition-all">Buy Creator</button>
                                 </div>
                                 {/* Unlimited Plan */}
                                 <div className="bg-black/50 border border-white/10 rounded-3xl p-8 flex flex-col hover:border-amber-500/30 transition-all group">
@@ -387,7 +439,17 @@ const App = () => {
                                         <li className="flex gap-3 text-slate-300 text-sm"><CheckCircle2 className="w-5 h-5 text-amber-500 shrink-0" /> Priority Processing</li>
                                         <li className="flex gap-3 text-slate-300 text-sm"><CheckCircle2 className="w-5 h-5 text-amber-500 shrink-0" /> Commercial Rights</li>
                                     </ul>
-                                    <button onClick={() => { setHasPlan(true); setShowPlans(false); toast.success('Studio Plan Activated!', { icon: '💳' }); }} className="w-full py-4 bg-white/5 hover:bg-amber-500 hover:text-white text-slate-300 rounded-xl font-bold uppercase tracking-widest transition-all">Go Unlimited</button>
+                                    <button onClick={() => {
+                                        setConfirmDialog({
+                                            show: true,
+                                            title: 'Go Unlimited',
+                                            message: 'Are you sure you want to activate the Studio Unlimited Plan?',
+                                            type: 'primary',
+                                            onConfirm: () => {
+                                                setHasPlan(true); setShowPlans(false); toast.success('Studio Plan Activated!', { icon: '💳' });
+                                            }
+                                        });
+                                    }} className="w-full py-4 bg-white/5 hover:bg-amber-500 hover:text-white text-slate-300 rounded-xl font-bold uppercase tracking-widest transition-all">Go Unlimited</button>
                                 </div>
                             </div>
                         </div>
@@ -698,16 +760,56 @@ const App = () => {
                             <button onClick={() => setActiveTab('studio')} className="mt-8 px-8 py-3 bg-blue-600/10 hover:bg-blue-600/20 text-blue-500 hover:text-blue-400 rounded-xl font-black uppercase tracking-widest text-[10px] transition-colors border border-blue-500/20">Go to Studio</button>
                         </div>
                     ) : (
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 animate-in fade-in duration-500">
-                            {vaultItems.map(item => (
-                                <div key={item.timestamp} className="bg-[#0F1118] p-6 rounded-[2rem] border border-white/5 flex justify-between items-center group hover:border-blue-500/50 transition-all shadow-xl">
-                                    <div className="flex items-center gap-6">
-                                        <button onClick={() => { voiceRef.current.src = item.url; setParsedSubtitles(item.srt ? parseSRT(item.srt) : []); voiceRef.current.play(); }} className="w-12 h-12 bg-blue-600/10 text-blue-500 rounded-2xl flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white transition-all shadow-inner"><Play className="w-5 h-5 fill-current ml-1" /></button>
-                                        <div><div className="text-sm font-bold text-white italic line-clamp-1">"{item.text}..."</div><div className="text-[9px] uppercase font-black text-slate-600 mt-1 tracking-widest">{item.voice} • {item.date}</div></div>
+                        <div className="flex flex-col gap-6">
+                            <div className="flex justify-between items-center px-4">
+                                <h3 className="text-[10px] font-black uppercase text-slate-500 tracking-[0.3em]">Your Master Collection</h3>
+                                <button onClick={() => {
+                                    setConfirmDialog({
+                                        show: true,
+                                        title: 'Clear Vault?',
+                                        message: 'This will permanently remove all your generated audio from the local vault. This action cannot be undone.',
+                                        type: 'danger',
+                                        onConfirm: () => {
+                                            setVaultItems([]);
+                                            localStorage.removeItem('vokal_vault');
+                                            toast.success('Vault Cleared');
+                                        }
+                                    });
+                                }} className="text-[9px] font-black uppercase text-red-500/60 hover:text-red-500 transition-colors flex items-center gap-2">
+                                    <Trash2 className="w-3.5 h-3.5" /> Clear All
+                                </button>
+                            </div>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 animate-in fade-in duration-500 pb-20">
+                                {vaultItems.map(item => (
+                                    <div key={item.timestamp} className="bg-[#0F1118] p-6 rounded-[2.5rem] border border-white/5 flex justify-between items-center group hover:border-blue-500/50 transition-all shadow-xl relative overflow-hidden">
+                                        <div className="flex items-center gap-6 relative z-10">
+                                            <button onClick={() => { voiceRef.current.src = item.url; setParsedSubtitles(item.srt ? parseSRT(item.srt) : []); voiceRef.current.play(); }} className="w-12 h-12 bg-blue-600/10 text-blue-500 rounded-2xl flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white transition-all shadow-inner"><Play className="w-5 h-5 fill-current ml-1" /></button>
+                                            <div>
+                                                <div className="text-sm font-bold text-white italic line-clamp-1 group-hover:text-blue-200 transition-colors">"{item.text}..."</div>
+                                                <div className="text-[9px] uppercase font-black text-slate-600 mt-1 tracking-widest">{item.voice} • {item.date}</div>
+                                            </div>
+                                        </div>
+                                        <div className="flex items-center gap-2 relative z-10">
+                                            <a href={item.url} download className="p-3 text-slate-600 hover:text-white transition-colors"><Download className="w-5 h-5" /></a>
+                                            <button onClick={() => {
+                                                setConfirmDialog({
+                                                    show: true,
+                                                    title: 'Delete Track?',
+                                                    message: 'Are you sure you want to delete this master track from your history?',
+                                                    type: 'danger',
+                                                    onConfirm: () => {
+                                                        const newItems = vaultItems.filter(v => v.timestamp !== item.timestamp);
+                                                        setVaultItems(newItems);
+                                                        localStorage.setItem('vokal_vault', JSON.stringify(newItems));
+                                                        toast.success('Track Deleted');
+                                                    }
+                                                });
+                                            }} className="p-3 text-slate-600 hover:text-red-500 transition-colors opacity-0 group-hover:opacity-100"><Trash2 className="w-5 h-5" /></button>
+                                        </div>
+                                        <div className="absolute top-0 right-0 w-24 h-24 bg-blue-600/5 rounded-full blur-3xl -mr-12 -mt-12 transition-opacity opacity-0 group-hover:opacity-100"></div>
                                     </div>
-                                    <a href={item.url} download className="p-3 text-slate-500 hover:text-white transition-colors"><Download className="w-5 h-5" /></a>
-                                </div>
-                            ))}
+                                ))}
+                            </div>
                         </div>
                     )
                 )}
@@ -768,9 +870,17 @@ const App = () => {
                                 if (isGuestMode) {
                                     setIsGuestMode(false);
                                 } else {
-                                    signOut(auth).then(() => {
-                                        toast.success('Signed out successfully');
-                                        setActiveTab('studio');
+                                    setConfirmDialog({
+                                        show: true,
+                                        title: 'Sign Out?',
+                                        message: 'Are you sure you want to sign out? You will need to log back in to access your pro features.',
+                                        type: 'danger',
+                                        onConfirm: () => {
+                                            signOut(auth).then(() => {
+                                                toast.success('Signed out successfully');
+                                                setActiveTab('studio');
+                                            });
+                                        }
                                     });
                                 }
                             }} className="mt-6 w-full py-5 bg-white/5 hover:bg-red-500/10 text-slate-500 hover:text-red-500 rounded-2xl font-black uppercase tracking-widest text-[10px] transition-all border border-white/5 flex items-center justify-center gap-3">
