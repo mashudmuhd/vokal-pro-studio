@@ -23,8 +23,8 @@ export default async function handler(req, res) {
     }
 
     const modelMap = {
-        tts: 'gemini-2.0-flash',
-        analysis: 'gemini-2.0-flash',
+        tts: 'gemini-2.5-flash-preview-tts',
+        analysis: 'gemini-2.5-flash',
     };
 
     const model = modelMap[type];
