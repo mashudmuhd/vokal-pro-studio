@@ -1,18 +1,14 @@
-module.exports = async function handler(req, res) {
-    // CORS configuration
-    const allowed = ['https://mashudmuhd.github.io', 'http://localhost:5173', 'http://localhost:5174'];
-    const origin = req.headers.origin;
+export default async function handler(req, res) {
+    // Standard CORS headers for all responses
+    res.setHeader('Access-Control-Allow-Credentials', true);
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
+    res.setHeader(
+        'Access-Control-Allow-Headers',
+        'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
+    );
 
-    if (allowed.includes(origin)) {
-        res.setHeader('Access-Control-Allow-Origin', origin);
-    } else {
-        res.setHeader('Access-Control-Allow-Origin', '*');
-    }
-
-    res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-
-    // Handle Preflight request (OPTIONS)
+    // Handle OPTIONS request
     if (req.method === 'OPTIONS') {
         return res.status(200).end();
     }
@@ -35,7 +31,7 @@ module.exports = async function handler(req, res) {
     if (!model) return res.status(400).json({ error: 'Invalid type' });
 
     const key = process.env.GEMINI_API_KEY;
-    if (!key) return res.status(500).json({ error: 'API key not configured in Vercel' });
+    if (!key) return res.status(500).json({ error: 'GEMINI_API_KEY not found in server environment' });
 
     const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${key}`;
 
@@ -46,9 +42,16 @@ module.exports = async function handler(req, res) {
             body: JSON.stringify(payload),
         });
 
+        if (!apiRes.ok) {
+            const errorText = await apiRes.text();
+            console.error('Gemini API Error:', errorText);
+            return res.status(apiRes.status).json({ error: `Gemini API returned ${apiRes.status}`, details: errorText });
+        }
+
         const data = await apiRes.json();
-        return res.status(apiRes.status).json(data);
+        return res.status(200).json(data);
     } catch (err) {
+        console.error('Vercel Function Error:', err.message);
         return res.status(500).json({ error: err.message });
     }
 }
