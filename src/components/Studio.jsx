@@ -26,9 +26,9 @@ const Studio = ({
                         value={script}
                         onChange={(e) => {
                             const val = e.target.value;
-                            if (isGuestMode && val.length > 50) {
+                            if (isGuestMode && val.length > 100) {
                                 // Handled in App level toast
-                                setScript(val.substring(0, 50));
+                                setScript(val.substring(0, 100));
                             } else if (!isGuestMode && user && !hasPlan && val.length > 500) {
                                 setShowPlans(true);
                                 setScript(val.substring(0, 500));
@@ -40,9 +40,9 @@ const Studio = ({
                         className="w-full min-h-[120px] max-h-[220px] lg:min-h-[300px] bg-transparent p-5 pb-12 sm:p-8 sm:pb-14 outline-none text-base sm:text-lg lg:text-2xl font-medium text-slate-100 resize-none transition-all leading-relaxed placeholder:text-slate-700 custom-scrollbar"
                     />
                     <div className="absolute bottom-5 right-6 sm:bottom-6 sm:right-8 text-[11px] font-black tracking-widest uppercase text-slate-600 pointer-events-none select-none flex items-center gap-1.5">
-                        <span className={script.length >= (isGuestMode ? 50 : (hasPlan ? Infinity : 500)) ? 'text-blue-500' : 'text-slate-400'}>{script.length}</span>
+                        <span className={script.length >= (isGuestMode ? 100 : (hasPlan ? Infinity : 500)) ? 'text-blue-500' : 'text-slate-400'}>{script.length}</span>
                         <span className="opacity-40">/</span>
-                        <span>{isGuestMode ? 50 : (hasPlan ? '∞' : 500)}</span>
+                        <span>{isGuestMode ? 100 : (hasPlan ? '∞' : 500)}</span>
                     </div>
                 </div>
 

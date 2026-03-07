@@ -179,27 +179,12 @@ const App = () => {
         let retries = 0;
         const maxRetries = 3;
 
-        // Bypass Vercel when running locally and we have the env key!
-        const localKey = import.meta.env.VITE_GEMINI_API_KEY;
-        const modelMap = { tts: 'gemini-2.5-flash-preview-tts', analysis: 'gemini-1.5-flash' };
-        const apiUrl = localKey
-            ? `https://generativelanguage.googleapis.com/v1beta/models/${modelMap[type]}:generateContent?key=${localKey}`
-            : CLOUD_FUNCTION_URL;
-
         const attemptFetch = async () => {
-            const fetchOptions = localKey
-                ? {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                }
-                : {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ type, payload })
-                };
-
-            const res = await fetch(apiUrl, fetchOptions);
+            const res = await fetch(CLOUD_FUNCTION_URL, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ type, payload })
+            });
 
             if (!res.ok) {
                 const errText = await res.text().catch(() => "{}");
@@ -231,6 +216,21 @@ const App = () => {
             setShowPlans(true);
             toast.error("Please upgrade to a Studio Pro plan to generate longer audio!", { icon: '👑' });
             return;
+        }
+
+        if (isGuestMode) {
+            let used = parseInt(localStorage.getItem('vokal_guest_used') || '0');
+            if (used + script.length > 100) {
+                const ipRes = await fetch('https://api64.ipify.org?format=json').catch(() => null);
+                const ip = ipRes ? (await ipRes.json()).ip : 'Unknown';
+                let deviceId = localStorage.getItem('vokal_device_id');
+                if (!deviceId) {
+                    deviceId = 'DEV_' + Math.random().toString(36).substr(2, 9).toUpperCase();
+                    localStorage.setItem('vokal_device_id', deviceId);
+                }
+                toast.error(`Access Denied! Device (${deviceId}) / IP (${ip}) has exhausted the 100 character free limit. Please register to continue.`, { icon: '🛑', duration: 7000 });
+                return;
+            }
         }
 
         if (!isAudioInitialized) await initializeAudio();
@@ -281,6 +281,11 @@ const App = () => {
                 await saveAudioToVault(meta, wavBlob);
                 const items = await getVaultItems();
                 setVaultItems(items);
+
+                if (isGuestMode) {
+                    let used = parseInt(localStorage.getItem('vokal_guest_used') || '0');
+                    localStorage.setItem('vokal_guest_used', used + script.length);
+                }
 
                 const newItem = items[0]; // Assuming nearest timestamp is listed first
                 setCurrentAudio(newItem);
