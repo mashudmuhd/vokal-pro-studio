@@ -102,14 +102,14 @@ const App = () => {
             // Check if current script is one of the many previous defaults to allow overwriting
             const isDefault = SCRIPT_LANGUAGES.some(l => l.defaultText === script) ||
                 script.trim() === '' ||
-                script.includes("മക്കളേ, സുഖമാണോ") ||
+                script.includes("സുഖമാണോ") ||
                 script.includes("സഹായിക്കുന്നതിനായി ഞാൻ ഇവിടെയുണ്ട്") ||
                 script.includes("help you create your professional voice") ||
                 script.startsWith("Hello! നമസ്കാരം");
 
             if (isDefault) {
                 if (currentVoice.lang === 'Malayalam') {
-                    setScript(`Hello! നമസ്കാരം, ഞാൻ ${currentVoice.label}യാണ്. `);
+                    setScript(`Hello! നമസ്കാരം, ${currentVoice.label}. `);
                 } else {
                     setScript(`Hello! I am ${currentVoice.label}. `);
                 }
