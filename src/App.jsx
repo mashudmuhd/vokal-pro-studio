@@ -305,9 +305,18 @@ const App = () => {
         if (!isAudioInitialized) await initializeAudio();
         if (!script.trim()) return;
 
-        // Smart Caching: Check if we already have this exact script with this voice & subtitle settings
+        // Smart Caching: 1. Instant check against current loaded audio
+        if (currentAudio &&
+            currentAudio.fullText === script &&
+            currentAudio.voice === selectedVoice &&
+            currentAudio.srtLang === (enableSubtitles ? srtLang : "None")) {
+            toast.success('Audio already generated and ready! 🎵', { id: 'cache-hit' });
+            return;
+        }
+
+        // 2. Deep check against the entire local vault (previous generations)
         const existingItem = vaultItems.find(item =>
-            item.text.trim() === script.substring(0, 40).trim() &&
+            (item.fullText === script || item.text.trim() === script.substring(0, 40).trim()) &&
             item.voice === selectedVoice &&
             item.srtLang === (enableSubtitles ? srtLang : "None")
         );
@@ -316,7 +325,7 @@ const App = () => {
             setCurrentAudio(existingItem);
             setParsedSubtitles(enableSubtitles ? parseSRT(existingItem.srt) : []);
             voiceRef.current.src = existingItem.url;
-            toast.success('Loaded from Cache! (Saved API Quota) ✨', { icon: '🔋' });
+            toast.success('Loaded from Local Cache! (Saved API Quota) ✨', { icon: '🔋', id: 'cache-loaded' });
             return;
         }
 
@@ -357,7 +366,9 @@ const App = () => {
 
                 const meta = {
                     srt: srtText, srtLang: enableSubtitles ? srtLang : "None",
-                    text: script.substring(0, 40), date: new Date().toLocaleTimeString(),
+                    text: script.substring(0, 40),
+                    fullText: script, // Full script for 100% accurate cache matching
+                    date: new Date().toLocaleTimeString(),
                     voice: selectedVoice, timestamp: Date.now()
                 };
 
