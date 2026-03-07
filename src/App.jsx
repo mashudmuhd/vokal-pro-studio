@@ -99,16 +99,19 @@ const App = () => {
     useEffect(() => {
         const currentVoice = VOICE_LIST.find(v => v.id === selectedVoice);
         if (currentVoice) {
-            // Only update if script is empty or is a previous default greeting
+            // Check if current script is one of the many previous defaults to allow overwriting
             const isDefault = SCRIPT_LANGUAGES.some(l => l.defaultText === script) ||
-                VOICE_LIST.some(v => v.lang === 'Malayalam' && script === `നമസ്കാരം, ഞാൻ ${v.label}യാണ്. നിങ്ങളുടെ പ്രൊഫഷണൽ വോയ്‌സ് കണ്ടന്റ് തയ്യാറാക്കാൻ സഹായിക്കുന്നതിനായി ഞാൻ ഇവിടെയുണ്ട്. ഇന്ന് നമുക്ക് എന്ത് കഥയാണ് പറയേണ്ടത്?`) ||
-                VOICE_LIST.some(v => v.lang === 'English' && script === `Hello! I am ${v.label}. I am here to help you create your professional voice content today. How can I assist you with your project?`);
+                script.trim() === '' ||
+                script.includes("മക്കളേ, സുഖമാണോ") ||
+                script.includes("സഹായിക്കുന്നതിനായി ഞാൻ ഇവിടെയുണ്ട്") ||
+                script.includes("help you create your professional voice") ||
+                script.startsWith("Hello! നമസ്കാരം");
 
-            if (isDefault || script.trim() === '') {
+            if (isDefault) {
                 if (currentVoice.lang === 'Malayalam') {
-                    setScript(`നമസ്കാരം, ഞാൻ ${currentVoice.label}യാണ്. നിങ്ങളുടെ പ്രൊഫഷണൽ വോയ്‌സ് കണ്ടന്റ് തയ്യാറാക്കാൻ സഹായിക്കുന്നതിനായി ഞാൻ ഇവിടെയുണ്ട്. ഇന്ന് നമുക്ക് എന്ത് കഥയാണ് പറയേണ്ടത്?`);
+                    setScript(`Hello! നമസ്കാരം, ഞാൻ ${currentVoice.label}യാണ്. `);
                 } else {
-                    setScript(`Hello! I am ${currentVoice.label}. I am here to help you create your professional voice content today. How can I assist you with your project?`);
+                    setScript(`Hello! I am ${currentVoice.label}. `);
                 }
             }
         }

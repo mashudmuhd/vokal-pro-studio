@@ -1,6 +1,6 @@
 export const SCRIPT_LANGUAGES = [
-    { id: 'Malayalam', native: 'മലയാളം', defaultText: 'നമസ്കാരം, നിങ്ങളുടെ പ്രൊഫഷണൽ വോയ്‌സ് കണ്ടന്റ് തയ്യാറാക്കാൻ സഹായിക്കുന്നതിനായി ഞാൻ ഇവിടെയുണ്ട്. ഇന്ന് നമുക്ക് എന്ത് കഥയാണ് പറയേണ്ടത്?' },
-    { id: 'English', native: 'ENGLISH', defaultText: 'Hello! I am here to help you create your professional voice content today. How can I assist you with your project?' }
+    { id: 'Malayalam', native: 'മലയാളം', defaultText: 'നമസ്കാരം' },
+    { id: 'English', native: 'ENGLISH', defaultText: 'Hello' }
 ];
 
 export const SUBTITLE_LANGUAGES = [
