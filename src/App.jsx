@@ -473,9 +473,19 @@ const App = () => {
                         setLang(newLang);
                         const langObj = SCRIPT_LANGUAGES.find(l => l.id === newLang);
                         if (langObj) {
-                            // Check if current script is one of the default scripts
+                            // Automatically select the best voice for the chosen language
+                            const langToVoice = {
+                                'Malayalam': 'Maya',
+                                'English': 'Francis',
+                                'Hindi': 'Ahaana',
+                                'Tamil': 'Maya'
+                            };
+                            if (langToVoice[newLang]) {
+                                setSelectedVoice(langToVoice[newLang]);
+                            }
+
+                            // Overwrite the script if it's the default one
                             const isDefault = SCRIPT_LANGUAGES.some(l => l.defaultText === script);
-                            // Only overwrite the user's text if they hadn't started typing their own custom text yet
                             if (isDefault || script.trim() === '') {
                                 setScript(langObj.defaultText);
                             }

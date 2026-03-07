@@ -33,10 +33,10 @@ export default async function handler(req, res) {
     if (!type_sel) return res.status(400).json({ error: 'Invalid type' });
 
     if (type === 'tts') {
-        const engine = payload.engine || "google";
-        const voiceId = payload.voiceId;
         const text = payload.text;
+        const engine = payload.engine || "google";
         const langCode = payload.langCode || "ml-IN";
+        const voiceId = payload.voiceId || (engine === 'elevenlabs' ? "N2lVS1wzexD6f831LInQ" : "ml-IN-Wavenet-C");
 
         if (engine === 'elevenlabs') {
             const key = process.env.ELEVENLABS_API_KEY;
