@@ -53,7 +53,7 @@ const App = () => {
     const [showVoiceSheet, setShowVoiceSheet] = useState(false);
     const [error, setError] = useState(null);
 
-    const [script, setScript] = useState("മക്കളേ, സുഖമാണോ? എല്ലാവരും ഭക്ഷണം കഴിച്ചോ?");
+    const [script, setScript] = useState("");
     const [isProcessing, setIsProcessing] = useState(false);
     const [selectedVoice, setSelectedVoice] = useState("Maya");
     const [vaultItems, setVaultItems] = useState([]);
@@ -95,6 +95,24 @@ const App = () => {
             setVaultItems(items);
         });
     }, []);
+
+    useEffect(() => {
+        const currentVoice = VOICE_LIST.find(v => v.id === selectedVoice);
+        if (currentVoice) {
+            // Only update if script is empty or is a previous default greeting
+            const isDefault = SCRIPT_LANGUAGES.some(l => l.defaultText === script) ||
+                VOICE_LIST.some(v => v.lang === 'Malayalam' && script === `നമസ്കാരം, ഞാൻ ${v.label}യാണ്. നിങ്ങളുടെ പ്രൊഫഷണൽ വോയ്‌സ് കണ്ടന്റ് തയ്യാറാക്കാൻ സഹായിക്കുന്നതിനായി ഞാൻ ഇവിടെയുണ്ട്. ഇന്ന് നമുക്ക് എന്ത് കഥയാണ് പറയേണ്ടത്?`) ||
+                VOICE_LIST.some(v => v.lang === 'English' && script === `Hello! I am ${v.label}. I am here to help you create your professional voice content today. How can I assist you with your project?`);
+
+            if (isDefault || script.trim() === '') {
+                if (currentVoice.lang === 'Malayalam') {
+                    setScript(`നമസ്കാരം, ഞാൻ ${currentVoice.label}യാണ്. നിങ്ങളുടെ പ്രൊഫഷണൽ വോയ്‌സ് കണ്ടന്റ് തയ്യാറാക്കാൻ സഹായിക്കുന്നതിനായി ഞാൻ ഇവിടെയുണ്ട്. ഇന്ന് നമുക്ക് എന്ത് കഥയാണ് പറയേണ്ടത്?`);
+                } else {
+                    setScript(`Hello! I am ${currentVoice.label}. I am here to help you create your professional voice content today. How can I assist you with your project?`);
+                }
+            }
+        }
+    }, [selectedVoice, lang]);
 
     const pcmToWav = (pcmData, sampleRate) => {
         const buffer = new ArrayBuffer(44 + pcmData.length * 2);
