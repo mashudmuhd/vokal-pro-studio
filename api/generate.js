@@ -1,3 +1,5 @@
+export const maxDuration = 60; // 60 seconds (max for Hobby plan on Vercel)
+
 export default async function handler(req, res) {
     // Standard CORS headers for all responses
     res.setHeader('Access-Control-Allow-Credentials', true);
