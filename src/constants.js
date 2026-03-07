@@ -14,22 +14,22 @@ export const VOICE_LIST = [
         id: "Maya",
         label: "Maya",
         type: "Natural Female",
-        desc: "Warm and expressive Malayalam voice.",
+        desc: "Clear and warm native Malayalam voice.",
         engine: "google",
-        voice_id: "ml-IN-Wavenet-C",
+        voice_id: "ml-IN-Wavenet-A",
         lang: "Malayalam",
-        pitch: 0,
-        speakingRate: 0.95
+        pitch: 0.5,
+        speakingRate: 1.05
     },
     {
         id: "Charan",
         label: "Charan",
         type: "Deep Narrative Male",
-        desc: "Deep, bass-rich voice inspired by Morgan Freeman.",
+        desc: "Deep narrative voice with natural Malayalam inflections.",
         engine: "google",
         voice_id: "ml-IN-Wavenet-B",
         lang: "Malayalam",
-        pitch: -6.5, // Targetting high bass for Morgan Freeman feel
-        speakingRate: 0.85 // Slower, more authoritative pace
+        pitch: -1.5,
+        speakingRate: 1.0
     }
 ];
