@@ -363,7 +363,9 @@ const App = () => {
                 voiceId: voiceId,
                 langCode: langMap[lang] || 'ml-IN',
                 pitch: voiceObj?.pitch || 0,
-                speakingRate: voiceObj?.speakingRate || 1.0
+                speakingRate: voiceObj?.speakingRate || 1.0,
+                engine: voiceObj?.engine || 'google',
+                id: voiceObj?.id
             };
 
             let srtPromise = null;
