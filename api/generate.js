@@ -68,7 +68,7 @@ export default async function handler(req, res) {
                         audioEncoding: "MP3",
                         pitch: payload.pitch || 0,
                         speakingRate: payload.speakingRate || 1.0,
-                        samplingRateHertz: 48000 // Higher fidelity
+                        sampleRateHertz: 48000 // Higher fidelity
                     }
                 }),
             });
