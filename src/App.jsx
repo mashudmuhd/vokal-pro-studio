@@ -474,9 +474,7 @@ const App = () => {
                             // Automatically select the best voice for the chosen language
                             const langToVoice = {
                                 'Malayalam': 'Maya',
-                                'English': 'Francis',
-                                'Hindi': 'Ahaana',
-                                'Tamil': 'Anbu'
+                                'English': 'Francis'
                             };
                             if (langToVoice[newLang]) {
                                 setSelectedVoice(langToVoice[newLang]);
