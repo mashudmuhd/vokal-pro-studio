@@ -476,7 +476,7 @@ const App = () => {
                                 'Malayalam': 'Maya',
                                 'English': 'Francis',
                                 'Hindi': 'Ahaana',
-                                'Tamil': 'Maya'
+                                'Tamil': 'Anbu'
                             };
                             if (langToVoice[newLang]) {
                                 setSelectedVoice(langToVoice[newLang]);

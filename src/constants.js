@@ -14,8 +14,10 @@ export const SUBTITLE_LANGUAGES = [
 
 export const VOICE_LIST = [
     { id: "Maya", label: "Maya", type: "Female", desc: "Warm, expressive Malayalam storytelling.", engine: "google", voice_id: "ml-IN-Wavenet-C" },
-    { id: "Francis", label: "Francis", type: "Studio Bass", desc: "Deep professional English (USA).", engine: "google", voice_id: "en-US-Neural2-D" },
-    { id: "Charan", label: "Charan", type: "Male", desc: "Clear Malayalam male voice.", engine: "google", voice_id: "ml-IN-Wavenet-B" },
-    { id: "Ahaana", label: "Ahaana", type: "Professional", desc: "Sweet Hindi voice.", engine: "google", voice_id: "hi-IN-Wavenet-A" },
-    { id: "Sarah", label: "Sarah", type: "Female", desc: "Narrative English (USA).", engine: "google", voice_id: "en-US-Neural2-C" }
+    { id: "Francis", label: "Francis", type: "Male", desc: "Deep professional English (USA).", engine: "google", voice_id: "en-US-Neural2-D" },
+    { id: "Charan", label: "Charan", type: "Male", desc: "Clear Malayalam narrative.", engine: "google", voice_id: "ml-IN-Wavenet-B" },
+    { id: "Ahaana", label: "Ahaana", type: "Female", desc: "Sweet Hindi professional voice.", engine: "google", voice_id: "hi-IN-Wavenet-A" },
+    { id: "Sarah", label: "Sarah", type: "Female", desc: "Narrative English (USA).", engine: "google", voice_id: "en-US-Neural2-C" },
+    { id: "Kavya", label: "Kavya", type: "Female", desc: "Balanced Malayalam speaker.", engine: "google", voice_id: "ml-IN-Standard-A" },
+    { id: "Anbu", label: "Anbu", type: "Male", desc: "Clear Tamil narrative voice.", engine: "google", voice_id: "ta-IN-Wavenet-B" }
 ];

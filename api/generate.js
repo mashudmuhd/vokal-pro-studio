@@ -33,9 +33,26 @@ export default async function handler(req, res) {
     if (!type_sel) return res.status(400).json({ error: 'Invalid type' });
 
     if (type === 'tts') {
-        const text = payload.text;
-        const langCode = payload.langCode || "ml-IN";
-        const voiceId = payload.voiceId || "ml-IN-Wavenet-C";
+        let text = payload.text;
+        let langCode = payload.langCode || "ml-IN";
+        let voiceId = payload.voiceId || "ml-IN-Wavenet-C";
+
+        // Safety Resolver for Legacy ElevenLabs IDs in cached browsers
+        const legacyMap = {
+            "5Q0t7uMcjduPzGP9uTZp": "en-US-Neural2-D",
+            "EXAVITQu4vr4xnSDxMaL": "en-US-Neural2-C",
+            "N2lVS1wzexD6f831LInQ": "en-US-Neural2-D",
+        };
+
+        if (legacyMap[voiceId]) {
+            voiceId = legacyMap[voiceId];
+            langCode = "en-US";
+        }
+
+        // Safe fallback for anything that isn't a Google ID
+        if (!voiceId.includes('-')) {
+            voiceId = langCode.startsWith('en') ? "en-US-Neural2-D" : "ml-IN-Wavenet-C";
+        }
 
         // Google Cloud TTS (Natural & Stable for all languages)
         const key = process.env.GEMINI_API_KEY;
