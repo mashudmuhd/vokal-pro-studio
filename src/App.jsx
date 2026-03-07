@@ -310,7 +310,6 @@ const App = () => {
             currentAudio.fullText === script &&
             currentAudio.voice === selectedVoice &&
             currentAudio.srtLang === (enableSubtitles ? srtLang : "None")) {
-            toast.success('Audio already generated and ready! 🎵', { id: 'cache-hit' });
             return;
         }
 
@@ -325,7 +324,6 @@ const App = () => {
             setCurrentAudio(existingItem);
             setParsedSubtitles(enableSubtitles ? parseSRT(existingItem.srt) : []);
             voiceRef.current.src = existingItem.url;
-            toast.success('Loaded from Local Cache! (Saved API Quota) ✨', { icon: '🔋', id: 'cache-loaded' });
             return;
         }
 
