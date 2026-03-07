@@ -181,7 +181,7 @@ const App = () => {
 
         // Bypass Vercel when running locally and we have the env key!
         const localKey = import.meta.env.VITE_GEMINI_API_KEY;
-        const modelMap = { tts: 'gemini-2.0-flash', analysis: 'gemini-1.5-flash' };
+        const modelMap = { tts: 'gemini-2.5-flash-preview-tts', analysis: 'gemini-1.5-flash' };
         const apiUrl = localKey
             ? `https://generativelanguage.googleapis.com/v1beta/models/${modelMap[type]}:generateContent?key=${localKey}`
             : CLOUD_FUNCTION_URL;
