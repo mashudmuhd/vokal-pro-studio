@@ -237,19 +237,12 @@ const App = () => {
         if (!script.trim()) return;
         setIsProcessing(true); setError(null);
         try {
-            let voiceName = GEMINI_VOICE_MAP[selectedVoice] || selectedVoice;
-            let stylePrompt = (selectedVoice === "Maya" || selectedVoice === "Ahaana")
-                ? "You must dictate the following text exactly as written, with no preamble. Use a warm, natural, and expressive female voice, keeping the speed perfectly steady and consistent: "
-                : "You must dictate the following text exactly as written, with no preamble. Use a clear, professional male voice with a highly consistent, steady pacing and tone: ";
+            const voiceObj = VOICE_LIST.find(v => v.id === selectedVoice);
+            const voiceId = voiceObj?.eleven_id || "cgSgspJ2msm6clMCkdW9";
 
             const voicePayload = {
-                contents: [{ parts: [{ text: `${stylePrompt}\n\nTEXT:\n${script}` }] }],
-                generationConfig: {
-                    temperature: 0.1,
-                    topP: 0.8,
-                    responseModalities: ["AUDIO"],
-                    speechConfig: { voiceConfig: { prebuiltVoiceConfig: { voiceName: voiceName } } }
-                }
+                text: script,
+                voiceId: voiceId
             };
 
             let srtPromise = null;
@@ -259,18 +252,17 @@ const App = () => {
             }
 
             const [vRes, sRes] = await Promise.all([callApi('tts', voicePayload), srtPromise]);
-            const audioData = vRes.candidates?.[0]?.content?.parts?.[0]?.inlineData;
+            const audioBase64 = vRes?.audio;
             const srtText = sRes?.candidates?.[0]?.content?.parts?.[0]?.text || "";
 
-            if (audioData) {
-                const binaryString = atob(audioData.data);
-                const len = binaryString.length;
-                const bytes = new Int16Array(len / 2);
-                for (let i = 0; i < len; i += 2) {
-                    bytes[i / 2] = (binaryString.charCodeAt(i + 1) << 8) | binaryString.charCodeAt(i);
+            if (audioBase64) {
+                const byteCharacters = atob(audioBase64);
+                const byteNumbers = new Array(byteCharacters.length);
+                for (let i = 0; i < byteCharacters.length; i++) {
+                    byteNumbers[i] = byteCharacters.charCodeAt(i);
                 }
-                const sampleRate = parseInt(audioData.mimeType.split('rate=')[1]) || 24000;
-                const wavBlob = pcmToWav(bytes, sampleRate);
+                const byteArray = new Uint8Array(byteNumbers);
+                const wavBlob = new Blob([byteArray], { type: 'audio/mpeg' });
 
                 const meta = {
                     srt: srtText, srtLang: enableSubtitles ? srtLang : "None",

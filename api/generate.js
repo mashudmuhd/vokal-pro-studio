@@ -25,17 +25,51 @@ export default async function handler(req, res) {
     }
 
     const modelMap = {
-        tts: 'gemini-2.5-flash-preview-tts',
+        tts: 'elevenlabs',
         analysis: 'gemini-1.5-flash',
     };
 
-    const model = modelMap[type];
-    if (!model) return res.status(400).json({ error: 'Invalid type' });
+    const type_sel = modelMap[type];
+    if (!type_sel) return res.status(400).json({ error: 'Invalid type' });
+
+    if (type === 'tts') {
+        const key = process.env.ELEVENLABS_API_KEY;
+        if (!key) return res.status(500).json({ error: 'ELEVENLABS_API_KEY not found' });
+
+        const voiceId = payload.voiceId || "cgSgspJ2msm6clMCkdW9"; // Default Jessica
+        const apiUrl = `https://api.elevenlabs.io/v1/text-to-speech/${voiceId}?output_format=mp3_44100_128`;
+
+        try {
+            const apiRes = await fetch(apiUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'xi-api-key': key
+                },
+                body: JSON.stringify({
+                    text: payload.text,
+                    model_id: "eleven_multilingual_v2",
+                    voice_settings: { stability: 0.5, similarity_boost: 0.75 }
+                }),
+            });
+
+            if (!apiRes.ok) {
+                const errorText = await apiRes.text();
+                return res.status(apiRes.status).json({ error: `ElevenLabs API returned ${apiRes.status}`, details: errorText });
+            }
+
+            const audioBuffer = await apiRes.arrayBuffer();
+            const base64Audio = Buffer.from(audioBuffer).toString('base64');
+            return res.status(200).json({ audio: base64Audio });
+        } catch (err) {
+            return res.status(500).json({ error: err.message });
+        }
+    }
 
     const key = process.env.GEMINI_API_KEY;
     if (!key) return res.status(500).json({ error: 'GEMINI_API_KEY not found in server environment' });
 
-    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${key}`;
+    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${key}`;
 
     try {
         const apiRes = await fetch(apiUrl, {
@@ -46,14 +80,12 @@ export default async function handler(req, res) {
 
         if (!apiRes.ok) {
             const errorText = await apiRes.text();
-            console.error('Gemini API Error:', errorText);
             return res.status(apiRes.status).json({ error: `Gemini API returned ${apiRes.status}`, details: errorText });
         }
 
         const data = await apiRes.json();
         return res.status(200).json(data);
     } catch (err) {
-        console.error('Vercel Function Error:', err.message);
         return res.status(500).json({ error: err.message });
     }
 }

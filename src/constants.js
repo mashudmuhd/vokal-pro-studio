@@ -13,15 +13,8 @@ export const SUBTITLE_LANGUAGES = [
 ];
 
 export const VOICE_LIST = [
-    { id: "Maya", label: "Maya", type: "Female", desc: "Warm, expressive, maternal storytelling." },
-    { id: "Francis", label: "Francis", type: "Ultra Bass", desc: "Legendary voice with deep cinematic resonance." },
-    { id: "Charan", label: "Charan", type: "Slow Bass", desc: "Deep and slow flow." },
-    { id: "Ahaana", label: "Ahaana", type: "Professional", desc: "Clear professional voice." }
+    { id: "Maya", label: "Maya", type: "Female", desc: "Warm, expressive, maternal storytelling.", eleven_id: "cgSgspJ2msm6clMCkdW9" }, // Jessica
+    { id: "Francis", label: "Francis", type: "Ultra Bass", desc: "Legendary voice with deep cinematic resonance.", eleven_id: "N2lVS1wzexD6f831LInQ" }, // Paul
+    { id: "Charan", label: "Charan", type: "Slow Bass", desc: "Deep and slow flow.", eleven_id: "VR6AewrXVreH9W6VmD3G" }, // Thomas
+    { id: "Ahaana", label: "Ahaana", type: "Professional", desc: "Clear professional voice.", eleven_id: "EXAVITQu4vr4xnSDxMaL" }  // Sarah
 ];
-
-export const GEMINI_VOICE_MAP = {
-    "Maya": "Aoede", // Warm Female
-    "Francis": "Charon", // Deep Male
-    "Charan": "Charon", // Slow Deep
-    "Ahaana": "Kore"  // Professional Female
-};
