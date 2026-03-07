@@ -14,22 +14,22 @@ export const VOICE_LIST = [
         id: "Maya",
         label: "Maya",
         type: "Natural Female",
-        desc: "Clear and warm native Malayalam voice.",
+        desc: "Clear and fluent native Malayalam narrative.",
         engine: "google",
         voice_id: "ml-IN-Wavenet-A",
         lang: "Malayalam",
-        pitch: 0.5,
-        speakingRate: 1.05
+        pitch: 0,
+        speakingRate: 1.1
     },
     {
         id: "Charan",
         label: "Charan",
-        type: "Deep Narrative Male",
-        desc: "Deep narrative voice with natural Malayalam inflections.",
+        type: "Deep Male",
+        desc: "Professional narrative male with improved native flow.",
         engine: "google",
         voice_id: "ml-IN-Wavenet-B",
         lang: "Malayalam",
-        pitch: -1.5,
-        speakingRate: 1.0
+        pitch: -0.3,
+        speakingRate: 1.08
     }
 ];
