@@ -239,12 +239,14 @@ const App = () => {
         try {
             let voiceName = GEMINI_VOICE_MAP[selectedVoice] || selectedVoice;
             let stylePrompt = (selectedVoice === "Maya" || selectedVoice === "Ahaana")
-                ? "Speak in a natural, warm, and expressive Malayalam female voice with a steady, conversational pace. Ensure the flow is natural and not rushed."
-                : "Speak in a clear, professional male voice with a natural, steady conversational flow. Maintain a balanced and natural speed.";
+                ? "You must dictate the following text exactly as written, with no preamble. Use a warm, natural, and expressive female voice, keeping the speed perfectly steady and consistent: "
+                : "You must dictate the following text exactly as written, with no preamble. Use a clear, professional male voice with a highly consistent, steady pacing and tone: ";
 
             const voicePayload = {
-                contents: [{ parts: [{ text: `${stylePrompt}: ${script}` }] }],
+                contents: [{ parts: [{ text: `${stylePrompt}\n\nTEXT:\n${script}` }] }],
                 generationConfig: {
+                    temperature: 0.1,
+                    topP: 0.8,
                     responseModalities: ["AUDIO"],
                     speechConfig: { voiceConfig: { prebuiltVoiceConfig: { voiceName: voiceName } } }
                 }
@@ -450,7 +452,18 @@ const App = () => {
                     hasPlan={hasPlan}
                     lang={lang}
                     languages={SCRIPT_LANGUAGES}
-                    onLangChange={setLang}
+                    onLangChange={(newLang) => {
+                        setLang(newLang);
+                        const langObj = SCRIPT_LANGUAGES.find(l => l.id === newLang);
+                        if (langObj) {
+                            // Check if current script is one of the default scripts
+                            const isDefault = SCRIPT_LANGUAGES.some(l => l.defaultText === script);
+                            // Only overwrite the user's text if they hadn't started typing their own custom text yet
+                            if (isDefault || script.trim() === '') {
+                                setScript(langObj.defaultText);
+                            }
+                        }
+                    }}
                     onSignOutAction={handleSignOutConfirm}
                 />
 

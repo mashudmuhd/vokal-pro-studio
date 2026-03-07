@@ -1,8 +1,8 @@
 export const SCRIPT_LANGUAGES = [
-    { id: 'Malayalam', native: 'മലയാളം' },
-    { id: 'English', native: 'English' },
-    { id: 'Hindi', native: 'ഹിന്ദി' },
-    { id: 'Tamil', native: 'தமிழ்' }
+    { id: 'Malayalam', native: 'മലയാളം', defaultText: 'മക്കളേ, സുഖമാണോ? എല്ലാവരും ഭക്ഷണം കഴിച്ചോ?' },
+    { id: 'English', native: 'ENGLISH', defaultText: 'Hello there! How is everyone doing today? Have you all had your food?' },
+    { id: 'Hindi', native: 'हिन्दी', defaultText: 'नमस्ते! आप सब कैसे हैं? क्या आप सभी ने खाना खा लिया?' },
+    { id: 'Tamil', native: 'தமிழ்', defaultText: 'வணக்கம்! எல்லாரும் எப்படி இருக்கீங்க? எல்லாரும் சாப்பிட்டாச்சா?' }
 ];
 
 export const SUBTITLE_LANGUAGES = [
