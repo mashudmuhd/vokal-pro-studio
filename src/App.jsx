@@ -304,6 +304,22 @@ const App = () => {
 
         if (!isAudioInitialized) await initializeAudio();
         if (!script.trim()) return;
+
+        // Smart Caching: Check if we already have this exact script with this voice & subtitle settings
+        const existingItem = vaultItems.find(item =>
+            item.text.trim() === script.substring(0, 40).trim() &&
+            item.voice === selectedVoice &&
+            item.srtLang === (enableSubtitles ? srtLang : "None")
+        );
+
+        if (existingItem) {
+            setCurrentAudio(existingItem);
+            setParsedSubtitles(enableSubtitles ? parseSRT(existingItem.srt) : []);
+            voiceRef.current.src = existingItem.url;
+            toast.success('Loaded from Cache! (Saved API Quota) ✨', { icon: '🔋' });
+            return;
+        }
+
         setIsProcessing(true); setError(null);
         try {
             const voiceObj = VOICE_LIST.find(v => v.id === selectedVoice);
@@ -311,9 +327,7 @@ const App = () => {
 
             const langMap = {
                 'Malayalam': 'ml-IN',
-                'English': 'en-US',
-                'Hindi': 'hi-IN',
-                'Tamil': 'ta-IN'
+                'English': 'en-US'
             };
 
             const voicePayload = {

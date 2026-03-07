@@ -147,24 +147,28 @@ const Studio = ({
                     {currentAudio && !isProcessing && (
                         <div className="relative z-10 flex flex-col gap-5 animate-in slide-in-from-bottom-4 duration-500">
                             {/* Speed Controller */}
-                            <div className="bg-black/40 p-4 rounded-xl border border-white/5 flex flex-col gap-3">
+                            <div id="voice-speed-controller" className="bg-blue-500/5 p-5 rounded-3xl border border-blue-500/20 flex flex-col gap-4 shadow-lg shadow-blue-500/5">
                                 <div className="flex justify-between items-center">
-                                    <span className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Voice Speed</span>
-                                    <span className="text-[10px] font-black text-blue-500 bg-blue-500/10 px-2 py-0.5 rounded-md">{playbackSpeed}x</span>
+                                    <div className="flex items-center gap-2">
+                                        <Zap className="w-3.5 h-3.5 text-blue-500" />
+                                        <span className="text-[10px] font-black uppercase text-slate-400 tracking-wider">Voice Speed</span>
+                                    </div>
+                                    <span className="text-[11px] font-black text-white bg-blue-600 px-3 py-1 rounded-full shadow-lg shadow-blue-600/20">{playbackSpeed}x</span>
                                 </div>
                                 <input
+                                    id="speed-range-input"
                                     type="range"
                                     min="0.5"
                                     max="2.0"
                                     step="0.1"
                                     value={playbackSpeed}
                                     onChange={(e) => setPlaybackSpeed(parseFloat(e.target.value))}
-                                    className="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-blue-500"
+                                    className="w-full h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-blue-500 hover:accent-blue-400 transition-all"
                                 />
-                                <div className="flex justify-between text-[8px] font-bold text-slate-600 uppercase">
-                                    <span>Slow</span>
-                                    <span>Normal</span>
-                                    <span>Fast</span>
+                                <div className="flex justify-between text-[9px] font-black text-slate-500 uppercase tracking-tighter">
+                                    <span>0.5x (Slow)</span>
+                                    <span>1.0x (Normal)</span>
+                                    <span>2.0x (Fast)</span>
                                 </div>
                             </div>
 
