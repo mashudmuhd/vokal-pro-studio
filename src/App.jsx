@@ -340,7 +340,9 @@ const App = () => {
             const voicePayload = {
                 text: script,
                 voiceId: voiceId,
-                langCode: langMap[lang] || 'ml-IN'
+                langCode: langMap[lang] || 'ml-IN',
+                pitch: voiceObj?.pitch || 0,
+                speakingRate: voiceObj?.speakingRate || 1.0
             };
 
             let srtPromise = null;

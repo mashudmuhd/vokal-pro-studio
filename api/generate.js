@@ -64,7 +64,12 @@ export default async function handler(req, res) {
                 body: JSON.stringify({
                     input: { text },
                     voice: { languageCode: detectedLang, name: voiceId },
-                    audioConfig: { audioEncoding: "MP3" }
+                    audioConfig: {
+                        audioEncoding: "MP3",
+                        pitch: payload.pitch || 0,
+                        speakingRate: payload.speakingRate || 1.0,
+                        samplingRateHertz: 48000 // Higher fidelity
+                    }
                 }),
             });
             if (!apiRes.ok) {
