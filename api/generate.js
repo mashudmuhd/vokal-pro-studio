@@ -39,32 +39,24 @@ export default async function handler(req, res) {
 
         if (engine === 'gemini') {
             const key = process.env.GEMINI_API_KEY;
-            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${key}`;
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${key}`;
 
             // Map our voice names to Gemini Native Voice names
             // Gemini Native Voices: Aoede, Charon, Fenrir, Kore, Puck
-            const geminiVoiceMap = {
-                'Maya': 'Aoede',   // Warm/Natural female
-                'Charan': 'Charon' // Deep/Narrative male
-            };
-
-            const geminiVoice = geminiVoiceMap[payload.id] || 'Aoede';
+            const geminiVoiceType = payload.id === 'Maya' ? 'warm female' : 'deep professional male';
 
             try {
                 const apiRes = await fetch(apiUrl, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        contents: [{ parts: [{ text: `Read this text naturally in Malayalam: ${text}` }] }],
+                        contents: [{
+                            parts: [{
+                                text: `Read this text naturally in Malayalam using a ${geminiVoiceType} voice: ${text}`
+                            }]
+                        }],
                         generationConfig: {
-                            response_modalities: ["audio"],
-                            speech_config: {
-                                voice_config: {
-                                    prebuilt_voice_config: {
-                                        voice_name: geminiVoice
-                                    }
-                                }
-                            }
+                            response_modalities: ["audio"]
                         }
                     }),
                 });
