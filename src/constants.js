@@ -9,15 +9,15 @@ export const SUBTITLE_LANGUAGES = [
 ];
 
 export const VOICE_LIST = [
-    // Malayalam - Strictly Google Wavenet/Natural
-    { id: "Maya", label: "Maya", type: "Natural Female", desc: "Warm storytelling voice.", engine: "google", voice_id: "ml-IN-Wavenet-C", lang: "Malayalam" },
-    { id: "Charan", label: "Charan", type: "Natural Male", desc: "Clear professional narrative.", engine: "google", voice_id: "ml-IN-Wavenet-B", lang: "Malayalam" },
-    { id: "Kavya", label: "Kavya", type: "Natural Female", desc: "Sharp and clear pronunciation.", engine: "google", voice_id: "ml-IN-Wavenet-A", lang: "Malayalam" },
-    { id: "Ravi", label: "Ravi", type: "Standard Male", desc: "Direct and straightforward speech.", engine: "google", voice_id: "ml-IN-Standard-B", lang: "Malayalam" },
+    // Malayalam - Diverse Natural Models
+    { id: "Maya", label: "Maya", type: "Bright Female", desc: "Clear and energetic Malayalam output.", engine: "google", voice_id: "ml-IN-Wavenet-A", lang: "Malayalam" },
+    { id: "Charan", label: "Charan", type: "Deep Male", desc: "Commanding and professional male narrative.", engine: "google", voice_id: "ml-IN-Wavenet-B", lang: "Malayalam" },
+    { id: "Kavya", label: "Kavya", type: "Calm Female", desc: "Soft and storytelling-focused voice.", engine: "google", voice_id: "ml-IN-Wavenet-C", lang: "Malayalam" },
+    { id: "Ravi", label: "Ravi", type: "Radio Male", desc: "Classic broadcast style male voice.", engine: "google", voice_id: "ml-IN-Standard-B", lang: "Malayalam" },
 
-    // English - Strictly Google Studio/Neural2
-    { id: "Francis", label: "Francis", type: "Natural Male", desc: "Deep professional American English.", engine: "google", voice_id: "en-US-Neural2-D", lang: "English" },
-    { id: "Sarah", label: "Sarah", type: "Natural Female", desc: "Friendly narrative English.", engine: "google", voice_id: "en-US-Neural2-C", lang: "English" },
-    { id: "Jasper", label: "Jasper", type: "Studio Male", desc: "Ultra-high quality studio voice.", engine: "google", voice_id: "en-US-Studio-Q", lang: "English" },
-    { id: "Emma", label: "Emma", type: "Natural Female", desc: "Soft and expressive American accent.", engine: "google", voice_id: "en-US-Neural2-F", lang: "English" }
+    // English - High Diversity Neural2/Studio
+    { id: "Francis", label: "Francis", type: "Professional Male", desc: "Standard business narration.", engine: "google", voice_id: "en-US-Neural2-D", lang: "English" },
+    { id: "Sarah", label: "Sarah", type: "Soft Female", desc: "Gentle and smooth American accent.", engine: "google", voice_id: "en-US-Neural2-F", lang: "English" },
+    { id: "Jasper", label: "Jasper", type: "Studio Male", desc: "Premium high-fidelity male voice.", engine: "google", voice_id: "en-US-Studio-Q", lang: "English" },
+    { id: "Emma", label: "Emma", type: "Expressive Female", desc: "High-pitch and lively character voice.", engine: "google", voice_id: "en-US-Neural2-H", lang: "English" }
 ];
