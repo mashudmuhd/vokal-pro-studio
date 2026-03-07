@@ -212,9 +212,18 @@ const App = () => {
 
     const handleGenerateVoice = async () => {
         if (isProcessing) return;
-        if (!isGuestMode && user && !hasPlan && script.length > 500) {
+
+        // Premium Limit
+        if (!hasPlan && script.length > 500) {
             setShowPlans(true);
-            toast.error("Please upgrade to a Studio Pro plan to generate longer audio!", { icon: '👑' });
+            toast.error("Upgrade to Premium to generate longer audio! 👑", { icon: '👑' });
+            return;
+        }
+
+        // Subtitle Premium Check
+        if (enableSubtitles && !hasPlan) {
+            setShowPlans(true);
+            toast.error("Auto Subtitles require a Premium plan! 👑", { icon: '👑' });
             return;
         }
 
@@ -228,7 +237,8 @@ const App = () => {
                     deviceId = 'DEV_' + Math.random().toString(36).substr(2, 9).toUpperCase();
                     localStorage.setItem('vokal_device_id', deviceId);
                 }
-                toast.error(`Access Denied! Device (${deviceId}) / IP (${ip}) has exhausted the 100 character free limit. Please register to continue.`, { icon: '🛑', duration: 7000 });
+                toast.error(`Access Denied! Device (${deviceId}) has reached the 100 char free limit. Please register to continue.`, { icon: '🛑', duration: 7000 });
+                setShowPlans(true);
                 return;
             }
         }

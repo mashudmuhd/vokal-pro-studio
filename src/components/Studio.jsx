@@ -2,8 +2,9 @@ import React from 'react';
 import {
     Loader2, AlertCircle, Headset, ChevronRight, Sparkles,
     ToggleLeft, ToggleRight, Zap, Eye, PauseCircle, PlayCircle,
-    Download, FileCode
+    Download, FileCode, Crown
 } from 'lucide-react';
+import { toast } from 'react-hot-toast';
 
 const Studio = ({
     error, script, setScript, isProcessing, isGuestMode, user, hasPlan, setShowPlans,
@@ -27,9 +28,9 @@ const Studio = ({
                         onChange={(e) => {
                             const val = e.target.value;
                             if (isGuestMode && val.length > 100) {
-                                // Handled in App level toast
                                 setScript(val.substring(0, 100));
-                            } else if (!isGuestMode && user && !hasPlan && val.length > 500) {
+                                toast.error("Guest limit reached! Please sign up for more.", { id: 'guest-limit' });
+                            } else if (!hasPlan && val.length > 500) {
                                 setShowPlans(true);
                                 setScript(val.substring(0, 500));
                             } else {
@@ -49,7 +50,18 @@ const Studio = ({
                 <div className="shrink-0 bg-[#0F1118]/80 backdrop-blur-xl p-6 rounded-[2.5rem] border border-white/5 flex flex-col sm:flex-row sm:flex-wrap items-center justify-between gap-6 shadow-xl relative overflow-hidden">
                     <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/5 via-transparent to-blue-500/5 opacity-50"></div>
                     <div className="relative flex flex-wrap items-center gap-6 z-10 w-full sm:w-auto">
-                        <button onClick={() => setEnableSubtitles(!enableSubtitles)} className={`flex items-center justify-center gap-3 px-6 py-3.5 rounded-2xl font-black text-[10px] uppercase transition-all duration-300 ${enableSubtitles ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 shadow-lg shadow-emerald-500/10' : 'bg-black/50 text-slate-500 border border-white/5 hover:bg-white/5 hover:text-slate-300'}`}>
+                        <button
+                            onClick={() => {
+                                if (!hasPlan) {
+                                    setShowPlans(true);
+                                    toast.error("Subtitles are a Premium feature! 👑");
+                                    return;
+                                }
+                                setEnableSubtitles(!enableSubtitles);
+                            }}
+                            className={`flex items-center justify-center gap-3 px-6 py-3.5 rounded-2xl font-black text-[10px] uppercase transition-all duration-300 ${enableSubtitles ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 shadow-lg shadow-emerald-500/10' : 'bg-black/50 text-slate-500 border border-white/5 hover:bg-white/5 hover:text-slate-300'}`}
+                        >
+                            {!hasPlan && <Crown className="w-3.5 h-3.5 text-amber-500" />}
                             {enableSubtitles ? <ToggleRight className="w-5 h-5" /> : <ToggleLeft className="w-5 h-5" />} Auto Subtitles
                         </button>
                         {enableSubtitles && (
