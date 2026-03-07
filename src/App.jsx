@@ -248,7 +248,6 @@ const App = () => {
         setIsProcessing(true); setError(null);
         try {
             const voiceObj = VOICE_LIST.find(v => v.id === selectedVoice);
-            const engine = voiceObj?.engine || "google";
             const voiceId = voiceObj?.voice_id || "ml-IN-Wavenet-C";
 
             const langMap = {
@@ -261,7 +260,6 @@ const App = () => {
             const voicePayload = {
                 text: script,
                 voiceId: voiceId,
-                engine: engine,
                 langCode: langMap[lang] || 'ml-IN'
             };
 

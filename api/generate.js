@@ -34,49 +34,29 @@ export default async function handler(req, res) {
 
     if (type === 'tts') {
         const text = payload.text;
-        const engine = payload.engine || "google";
         const langCode = payload.langCode || "ml-IN";
-        const voiceId = payload.voiceId || (engine === 'elevenlabs' ? "N2lVS1wzexD6f831LInQ" : "ml-IN-Wavenet-C");
+        const voiceId = payload.voiceId || "ml-IN-Wavenet-C";
 
-        if (engine === 'elevenlabs') {
-            const key = process.env.ELEVENLABS_API_KEY;
-            const apiUrl = `https://api.elevenlabs.io/v1/text-to-speech/${voiceId}?output_format=mp3_44100_128`;
-            try {
-                const apiRes = await fetch(apiUrl, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json', 'xi-api-key': key },
-                    body: JSON.stringify({
-                        text,
-                        model_id: "eleven_multilingual_v2",
-                        voice_settings: { stability: 0.5, similarity_boost: 0.75 }
-                    }),
-                });
-                if (!apiRes.ok) throw new Error(`ElevenLabs Error: ${apiRes.status}`);
-                const audioBuffer = await apiRes.arrayBuffer();
-                return res.status(200).json({ audio: Buffer.from(audioBuffer).toString('base64') });
-            } catch (err) { return res.status(500).json({ error: err.message }); }
-        } else {
-            // Google Cloud TTS (Natural Malayalam Support)
-            const key = process.env.GEMINI_API_KEY;
-            const apiUrl = `https://texttospeech.googleapis.com/v1/text:synthesize?key=${key}`;
-            try {
-                const apiRes = await fetch(apiUrl, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        input: { text },
-                        voice: { languageCode: langCode, name: voiceId },
-                        audioConfig: { audioEncoding: "MP3" }
-                    }),
-                });
-                if (!apiRes.ok) {
-                    const errData = await apiRes.text();
-                    throw new Error(`Google TTS Error: ${errData}`);
-                }
-                const data = await apiRes.json();
-                return res.status(200).json({ audio: data.audioContent });
-            } catch (err) { return res.status(500).json({ error: err.message }); }
-        }
+        // Google Cloud TTS (Natural & Stable for all languages)
+        const key = process.env.GEMINI_API_KEY;
+        const apiUrl = `https://texttospeech.googleapis.com/v1/text:synthesize?key=${key}`;
+        try {
+            const apiRes = await fetch(apiUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    input: { text },
+                    voice: { languageCode: langCode, name: voiceId },
+                    audioConfig: { audioEncoding: "MP3" }
+                }),
+            });
+            if (!apiRes.ok) {
+                const errData = await apiRes.text();
+                throw new Error(`Google TTS Error: ${errData}`);
+            }
+            const data = await apiRes.json();
+            return res.status(200).json({ audio: data.audioContent });
+        } catch (err) { return res.status(500).json({ error: err.message }); }
     }
 
     const key = process.env.GEMINI_API_KEY;
