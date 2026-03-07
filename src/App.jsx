@@ -382,7 +382,7 @@ const App = () => {
                         </div>
                         <div className="overflow-y-auto custom-scrollbar flex-1 pr-2">
                             <div className="space-y-3 relative z-10 w-full mb-4">
-                                {VOICE_LIST.map(v => (
+                                {VOICE_LIST.filter(v => v.lang === lang).map(v => (
                                     <div
                                         key={v.id}
                                         className={`w-full p-4 rounded-2xl text-left border flex items-center gap-4 transition-all duration-300 group cursor-pointer ${selectedVoice === v.id ? 'bg-blue-500/10 border-blue-500/30 shadow-inner' : 'bg-black/40 border-white/5 hover:border-white/10 hover:bg-white/5'}`}
@@ -413,7 +413,7 @@ const App = () => {
                                             }}
                                             className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 transition-colors z-20 hover:scale-105 active:scale-95 ${playingPreview === v.id ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/20' : (selectedVoice === v.id ? 'bg-blue-500 text-white shadow-lg shadow-blue-500/20' : 'bg-white/5 text-slate-400 hover:bg-white/10 group-hover:text-white')}`}
                                         >
-                                            {playingPreview === v.id ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4 ml-0.5" />}
+                                            {playingPreview === v.id ? <PauseCircle className="w-4 h-4" /> : <PlayCircle className="w-4 h-4 ml-0.5" />}
                                         </button>
                                         <div className="flex-1">
                                             <div className={`text-sm font-bold mb-1 transition-colors ${selectedVoice === v.id ? 'text-white' : 'text-slate-300 group-hover:text-white'}`}>{v.label}</div>
@@ -509,7 +509,7 @@ const App = () => {
                         subtitleLanguages={SUBTITLE_LANGUAGES}
                         selectedVoice={selectedVoice}
                         setShowVoiceSheet={setShowVoiceSheet}
-                        voiceList={VOICE_LIST}
+                        voiceList={VOICE_LIST.filter(v => v.lang === lang)}
                         onGenerate={Object.assign(handleGenerateVoice, {
                             onVoiceSelect: setSelectedVoice,
                             onPreview: (id) => {
