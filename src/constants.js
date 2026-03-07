@@ -14,7 +14,7 @@ export const SUBTITLE_LANGUAGES = [
 
 export const VOICE_LIST = [
     { id: "Maya", label: "Maya", type: "Female", desc: "Warm, expressive Malayalam storytelling.", engine: "google", voice_id: "ml-IN-Wavenet-C" },
-    { id: "Francis", label: "Francis", type: "Ultra Bass", desc: "Cinematic resonance.", engine: "elevenlabs", voice_id: "N2lVS1wzexD6f831LInQ" },
+    { id: "Francis", label: "Francis", type: "Ultra Bass", desc: "Cinematic resonance.", engine: "elevenlabs", voice_id: "5Q0t7uMcjduPzGP9uTZp" },
     { id: "Charan", label: "Charan", type: "Slow Bass", desc: "Deep and slow flow.", engine: "google", voice_id: "ml-IN-Wavenet-B" },
     { id: "Ahaana", label: "Ahaana", type: "Professional", desc: "Clear professional voice.", engine: "google", voice_id: "ml-IN-Standard-A" },
     { id: "Sarah", label: "Sarah", type: "English Pro", desc: "Perfect English accent.", engine: "elevenlabs", voice_id: "EXAVITQu4vr4xnSDxMaL" }
