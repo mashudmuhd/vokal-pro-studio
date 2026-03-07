@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Loader2, Headset, X, Play, Pause } from 'lucide-react';
+import { Loader2, Headset, X, Play, Pause, PlayCircle, PauseCircle } from 'lucide-react';
 
 import { auth } from './firebase';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
@@ -508,8 +508,10 @@ const App = () => {
                         selectedVoice={selectedVoice}
                         setShowVoiceSheet={setShowVoiceSheet}
                         voiceList={VOICE_LIST.filter(v => v.lang === lang)}
-                        onGenerate={Object.assign(handleGenerateVoice, {
+                        onGenerate={{
+                            handle: handleGenerateVoice,
                             onVoiceSelect: setSelectedVoice,
+                            playingPreview: playingPreview,
                             onPreview: (id) => {
                                 if (playingPreview === id) {
                                     previewRef.current.pause();
@@ -530,9 +532,8 @@ const App = () => {
                                     setPlayingPreview(id);
                                     previewRef.current.onended = () => setPlayingPreview(null);
                                 }
-                            },
-                            playingPreview
-                        })}
+                            }
+                        }}
                         currentAudio={currentAudio}
                         activeSubtitle={activeSubtitle}
                         isPlayingCurrent={isPlayingCurrent}

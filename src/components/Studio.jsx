@@ -79,7 +79,7 @@ const Studio = ({
                             <ChevronRight className="w-4 h-4" />
                         </button>
 
-                        <button onClick={onGenerate} disabled={isProcessing || !script.trim()} className="w-full sm:w-auto px-8 py-5 bg-gradient-to-r from-blue-600 to-blue-500 rounded-2xl font-black text-white uppercase tracking-widest text-xs flex items-center justify-center gap-3 shadow-xl hover:shadow-blue-600/30 transition-all active:scale-95 disabled:opacity-40 disabled:grayscale">
+                        <button onClick={onGenerate.handle} disabled={isProcessing || !script.trim()} className="w-full sm:w-auto px-8 py-5 bg-gradient-to-r from-blue-600 to-blue-500 rounded-2xl font-black text-white uppercase tracking-widest text-xs flex items-center justify-center gap-3 shadow-xl hover:shadow-blue-600/30 transition-all active:scale-95 disabled:opacity-40 disabled:grayscale">
                             {isProcessing ? <Loader2 className="animate-spin w-5 h-5" /> : <Sparkles className="w-5 h-5" />} {isProcessing ? "Synthesizing..." : "Generate Master"}
                         </button>
                     </div>
