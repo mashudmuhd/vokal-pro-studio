@@ -34,27 +34,27 @@ export default async function handler(req, res) {
 
     if (type === 'tts') {
         let text = payload.text;
-        let langCode = payload.langCode || "ml-IN";
         let voiceId = payload.voiceId || "ml-IN-Wavenet-C";
 
-        // Safety Resolver for Legacy ElevenLabs IDs in cached browsers
+        // 1. Resolve Legacy IDs (for safety)
         const legacyMap = {
             "5Q0t7uMcjduPzGP9uTZp": "en-US-Neural2-D",
             "EXAVITQu4vr4xnSDxMaL": "en-US-Neural2-C",
             "N2lVS1wzexD6f831LInQ": "en-US-Neural2-D",
         };
+        if (legacyMap[voiceId]) voiceId = legacyMap[voiceId];
 
-        if (legacyMap[voiceId]) {
-            voiceId = legacyMap[voiceId];
-            langCode = "en-US";
+        // 2. SMART LANGUAGE DETECTION: 
+        // Always extract the language code from the voiceId itself (e.g., "en-US" from "en-US-Neural2-D")
+        // This prevents the mismatch error even if the frontend sends the wrong langCode.
+        let detectedLang = payload.langCode || "ml-IN";
+        if (voiceId.includes('-')) {
+            const parts = voiceId.split('-');
+            if (parts.length >= 2) {
+                detectedLang = `${parts[0]}-${parts[1]}`;
+            }
         }
 
-        // Safe fallback for anything that isn't a Google ID
-        if (!voiceId.includes('-')) {
-            voiceId = langCode.startsWith('en') ? "en-US-Neural2-D" : "ml-IN-Wavenet-C";
-        }
-
-        // Google Cloud TTS (Natural & Stable for all languages)
         const key = process.env.GEMINI_API_KEY;
         const apiUrl = `https://texttospeech.googleapis.com/v1/text:synthesize?key=${key}`;
         try {
@@ -63,7 +63,7 @@ export default async function handler(req, res) {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     input: { text },
-                    voice: { languageCode: langCode, name: voiceId },
+                    voice: { languageCode: detectedLang, name: voiceId },
                     audioConfig: { audioEncoding: "MP3" }
                 }),
             });
