@@ -14,7 +14,7 @@ import Profile from './components/Profile';
 import Plans from './components/Plans';
 import ConfirmDialog from './components/ConfirmDialog';
 
-import { SCRIPT_LANGUAGES, SUBTITLE_LANGUAGES, VOICE_LIST, GEMINI_VOICE_MAP } from './constants';
+import { SCRIPT_LANGUAGES, SUBTITLE_LANGUAGES, VOICE_LIST } from './constants';
 import { getVaultItems, saveAudioToVault, deleteVaultItem, clearVault } from './utils/vault';
 
 const CLOUD_FUNCTION_URL = import.meta.env.VITE_API_URL || "https://vokal-pro-api.vercel.app/api/generate";
