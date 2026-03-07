@@ -10,7 +10,8 @@ const Studio = ({
     error, script, setScript, isProcessing, isGuestMode, user, hasPlan, setShowPlans,
     enableSubtitles, setEnableSubtitles, srtLang, setSrtLang, subtitleLanguages,
     selectedVoice, setShowVoiceSheet, voiceList, onGenerate,
-    currentAudio, activeSubtitle, isPlayingCurrent, onTogglePlay, onDownload, onDownloadSrt
+    currentAudio, activeSubtitle, isPlayingCurrent, onTogglePlay, onDownload, onDownloadSrt,
+    playbackSpeed, setPlaybackSpeed
 }) => {
     return (
         <div className="flex flex-col lg:flex-row gap-6 flex-1">
@@ -145,6 +146,28 @@ const Studio = ({
 
                     {currentAudio && !isProcessing && (
                         <div className="relative z-10 flex flex-col gap-5 animate-in slide-in-from-bottom-4 duration-500">
+                            {/* Speed Controller */}
+                            <div className="bg-black/40 p-4 rounded-xl border border-white/5 flex flex-col gap-3">
+                                <div className="flex justify-between items-center">
+                                    <span className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Voice Speed</span>
+                                    <span className="text-[10px] font-black text-blue-500 bg-blue-500/10 px-2 py-0.5 rounded-md">{playbackSpeed}x</span>
+                                </div>
+                                <input
+                                    type="range"
+                                    min="0.5"
+                                    max="2.0"
+                                    step="0.1"
+                                    value={playbackSpeed}
+                                    onChange={(e) => setPlaybackSpeed(parseFloat(e.target.value))}
+                                    className="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-blue-500"
+                                />
+                                <div className="flex justify-between text-[8px] font-bold text-slate-600 uppercase">
+                                    <span>Slow</span>
+                                    <span>Normal</span>
+                                    <span>Fast</span>
+                                </div>
+                            </div>
+
                             <button onClick={onTogglePlay} className={`w-full py-4 rounded-2xl font-black uppercase tracking-wider text-[11px] flex items-center justify-center gap-3 transition-all shadow-xl ${isPlayingCurrent ? 'bg-white text-black scale-[0.98]' : 'bg-blue-600 text-white hover:bg-blue-500'}`}>
                                 {isPlayingCurrent ? <PauseCircle className="w-5 h-5" /> : <PlayCircle className="w-5 h-5" />}
                                 {isPlayingCurrent ? "Pause Master" : "Play Master Track"}

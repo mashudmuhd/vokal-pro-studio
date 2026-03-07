@@ -75,6 +75,7 @@ const App = () => {
     // Plans State
     const [hasPlan, setHasPlan] = useState(false);
     const [showPlans, setShowPlans] = useState(false);
+    const [playbackSpeed, setPlaybackSpeed] = useState(1.0);
     const [confirmDialog, setConfirmDialog] = useState({ show: false, title: '', message: '', onConfirm: null, type: 'danger' });
 
     const voiceRef = useRef(null);
@@ -138,6 +139,64 @@ const App = () => {
             };
             return { start: toSec(timeMatch[1]), end: toSec(timeMatch[2]), text: lines.slice(2).join(' ') };
         }).filter(s => s !== null);
+    };
+
+    const changeAudioSpeed = async (audioBlob, speed) => {
+        if (speed === 1.0) return audioBlob;
+        const arrayBuffer = await audioBlob.arrayBuffer();
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
+
+        const offlineCtx = new OfflineAudioContext(
+            audioBuffer.numberOfChannels,
+            audioBuffer.length / speed,
+            audioBuffer.sampleRate
+        );
+
+        const source = offlineCtx.createBufferSource();
+        source.buffer = audioBuffer;
+        source.playbackRate.value = speed;
+        source.connect(offlineCtx.destination);
+        source.start();
+
+        const renderedBuffer = await offlineCtx.startRendering();
+
+        // Convert to WAV
+        const length = renderedBuffer.length * renderedBuffer.numberOfChannels * 2 + 44;
+        const buffer = new ArrayBuffer(length);
+        const view = new DataView(buffer);
+
+        const writeString = (offset, string) => {
+            for (let i = 0; i < string.length; i++) {
+                view.setUint8(offset + i, string.charCodeAt(i));
+            }
+        };
+
+        writeString(0, 'RIFF');
+        view.setUint32(4, length - 8, true);
+        writeString(8, 'WAVE');
+        writeString(12, 'fmt ');
+        view.setUint32(16, 16, true);
+        view.setUint16(20, 1, true);
+        view.setUint16(22, renderedBuffer.numberOfChannels, true);
+        view.setUint32(24, renderedBuffer.sampleRate, true);
+        view.setUint32(28, renderedBuffer.sampleRate * renderedBuffer.numberOfChannels * 2, true);
+        view.setUint16(32, renderedBuffer.numberOfChannels * 2, true);
+        view.setUint16(34, 16, true);
+        writeString(36, 'data');
+        view.setUint32(40, length - 44, true);
+
+        let offset = 44;
+        for (let i = 0; i < renderedBuffer.length; i++) {
+            for (let channel = 0; channel < renderedBuffer.numberOfChannels; channel++) {
+                let sample = renderedBuffer.getChannelData(channel)[i];
+                sample = Math.max(-1, Math.min(1, sample));
+                view.setInt16(offset, sample < 0 ? sample * 0x8000 : sample * 0x7FFF, true);
+                offset += 2;
+            }
+        }
+
+        return new Blob([buffer], { type: 'audio/wav' });
     };
 
     useEffect(() => {
@@ -542,16 +601,21 @@ const App = () => {
                             if (isPlayingCurrent) {
                                 voiceRef.current.pause();
                             } else {
+                                voiceRef.current.playbackRate = playbackSpeed; // Apply speed on play
                                 voiceRef.current.play();
-                                setIsPlayingCurrent(true);
                             }
                         }}
-                        onDownload={() => {
+                        onDownload={async () => {
+                            const blob = await fetch(currentAudio.url).then(r => r.blob());
+                            const finalBlob = await changeAudioSpeed(blob, playbackSpeed);
+                            const url = URL.createObjectURL(finalBlob);
                             const a = document.createElement('a');
-                            a.href = currentAudio.url;
-                            a.download = "master_audio.wav";
+                            a.href = url;
+                            a.download = `master_audio_${playbackSpeed}x.wav`;
                             a.click();
                         }}
+                        playbackSpeed={playbackSpeed}
+                        setPlaybackSpeed={setPlaybackSpeed}
                         onDownloadSrt={() => {
                             const b = new Blob([currentAudio.srt], { type: 'text/plain' });
                             const a = document.createElement('a');
