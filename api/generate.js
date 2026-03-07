@@ -33,59 +33,61 @@ export default async function handler(req, res) {
     if (!type_sel) return res.status(400).json({ error: 'Invalid type' });
 
     if (type === 'tts') {
-        const key = process.env.ELEVENLABS_API_KEY;
-        if (!key) return res.status(500).json({ error: 'ELEVENLABS_API_KEY not found' });
+        const engine = payload.engine || "google";
+        const voiceId = payload.voiceId;
+        const text = payload.text;
+        const langCode = payload.langCode || "ml-IN";
 
-        const voiceId = payload.voiceId || "cgSgspJ2msm6clMCkdW9"; // Default Jessica
-        const apiUrl = `https://api.elevenlabs.io/v1/text-to-speech/${voiceId}?output_format=mp3_44100_128`;
-
-        try {
-            const apiRes = await fetch(apiUrl, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'xi-api-key': key
-                },
-                body: JSON.stringify({
-                    text: payload.text,
-                    model_id: "eleven_multilingual_v2",
-                    voice_settings: { stability: 0.5, similarity_boost: 0.75 }
-                }),
-            });
-
-            if (!apiRes.ok) {
-                const errorText = await apiRes.text();
-                return res.status(apiRes.status).json({ error: `ElevenLabs API returned ${apiRes.status}`, details: errorText });
-            }
-
-            const audioBuffer = await apiRes.arrayBuffer();
-            const base64Audio = Buffer.from(audioBuffer).toString('base64');
-            return res.status(200).json({ audio: base64Audio });
-        } catch (err) {
-            return res.status(500).json({ error: err.message });
+        if (engine === 'elevenlabs') {
+            const key = process.env.ELEVENLABS_API_KEY;
+            const apiUrl = `https://api.elevenlabs.io/v1/text-to-speech/${voiceId}?output_format=mp3_44100_128`;
+            try {
+                const apiRes = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'xi-api-key': key },
+                    body: JSON.stringify({
+                        text,
+                        model_id: "eleven_multilingual_v2",
+                        voice_settings: { stability: 0.5, similarity_boost: 0.75 }
+                    }),
+                });
+                if (!apiRes.ok) throw new Error(`ElevenLabs Error: ${apiRes.status}`);
+                const audioBuffer = await apiRes.arrayBuffer();
+                return res.status(200).json({ audio: Buffer.from(audioBuffer).toString('base64') });
+            } catch (err) { return res.status(500).json({ error: err.message }); }
+        } else {
+            // Google Cloud TTS (Natural Malayalam Support)
+            const key = process.env.GEMINI_API_KEY;
+            const apiUrl = `https://texttospeech.googleapis.com/v1/text:synthesize?key=${key}`;
+            try {
+                const apiRes = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        input: { text },
+                        voice: { languageCode: langCode, name: voiceId },
+                        audioConfig: { audioEncoding: "MP3" }
+                    }),
+                });
+                if (!apiRes.ok) {
+                    const errData = await apiRes.text();
+                    throw new Error(`Google TTS Error: ${errData}`);
+                }
+                const data = await apiRes.json();
+                return res.status(200).json({ audio: data.audioContent });
+            } catch (err) { return res.status(500).json({ error: err.message }); }
         }
     }
 
     const key = process.env.GEMINI_API_KEY;
-    if (!key) return res.status(500).json({ error: 'GEMINI_API_KEY not found in server environment' });
-
     const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${key}`;
-
     try {
         const apiRes = await fetch(apiUrl, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload),
         });
-
-        if (!apiRes.ok) {
-            const errorText = await apiRes.text();
-            return res.status(apiRes.status).json({ error: `Gemini API returned ${apiRes.status}`, details: errorText });
-        }
-
         const data = await apiRes.json();
         return res.status(200).json(data);
-    } catch (err) {
-        return res.status(500).json({ error: err.message });
-    }
+    } catch (err) { return res.status(500).json({ error: err.message }); }
 }

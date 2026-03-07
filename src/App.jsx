@@ -238,11 +238,21 @@ const App = () => {
         setIsProcessing(true); setError(null);
         try {
             const voiceObj = VOICE_LIST.find(v => v.id === selectedVoice);
-            const voiceId = voiceObj?.eleven_id || "cgSgspJ2msm6clMCkdW9";
+            const engine = voiceObj?.engine || "google";
+            const voiceId = voiceObj?.voice_id || "ml-IN-Wavenet-C";
+
+            const langMap = {
+                'Malayalam': 'ml-IN',
+                'English': 'en-US',
+                'Hindi': 'hi-IN',
+                'Tamil': 'ta-IN'
+            };
 
             const voicePayload = {
                 text: script,
-                voiceId: voiceId
+                voiceId: voiceId,
+                engine: engine,
+                langCode: langMap[lang] || 'ml-IN'
             };
 
             let srtPromise = null;
