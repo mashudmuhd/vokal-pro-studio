@@ -39,7 +39,7 @@ export default async function handler(req, res) {
 
         if (engine === 'gemini') {
             const key = process.env.GEMINI_API_KEY;
-            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${key}`;
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent?key=${key}`;
 
             // Map our voice names to Gemini Native Voice names
             // Gemini Native Voices: Aoede, Charon, Fenrir, Kore, Puck
