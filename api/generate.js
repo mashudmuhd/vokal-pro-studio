@@ -39,24 +39,32 @@ export default async function handler(req, res) {
 
         if (engine === 'gemini') {
             const key = process.env.GEMINI_API_KEY;
-            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent?key=${key}`;
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent?key=${key}`;
 
             // Map our voice names to Gemini Native Voice names
             // Gemini Native Voices: Aoede, Charon, Fenrir, Kore, Puck
-            const geminiVoiceType = payload.id === 'Maya' ? 'warm female' : 'deep professional male';
+            const geminiVoiceMap = {
+                'Maya': 'Aoede',   // Warm/Natural female
+                'Charan': 'Charon' // Deep/Narrative male
+            };
+
+            const geminiVoice = geminiVoiceMap[payload.id] || 'Aoede';
 
             try {
                 const apiRes = await fetch(apiUrl, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        contents: [{
-                            parts: [{
-                                text: `Read this text naturally in Malayalam using a ${geminiVoiceType} voice: ${text}`
-                            }]
-                        }],
+                        contents: [{ parts: [{ text: text }] }],
                         generationConfig: {
-                            response_modalities: ["audio"]
+                            responseModalities: ["AUDIO"],
+                            speechConfig: {
+                                voiceConfig: {
+                                    prebuiltVoiceConfig: {
+                                        voiceName: geminiVoice
+                                    }
+                                }
+                            }
                         }
                     }),
                 });
